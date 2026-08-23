@@ -1,89 +1,56 @@
 # PromptHub · AI生图提示词论坛
 
-一个纯前端、离线可用的 AI 生图提示词分享社区，支持完整的后台可视化管理。
+一个基于 GitHub Pages + GitHub JSON 数据存储的 AI 生图提示词分享论坛。
 
-## ✨ 功能特性
+## 特性
 
-### 前台功能
-- 🏠 **首页**：数据统计、热门分类、热门提示词、最新发布、活跃创作者
-- 🔍 **发现页**：分类筛选、模型筛选、标签筛选、关键词搜索、4种排序、网格/列表双视图、分页
-- 📄 **详情页**：正向/负向Prompt展示、一键复制、生成参数、相关推荐、点赞/收藏/评论
-- ✏️ **发布页**：分组表单、标签输入、参数配置，支持编辑已有提示词
-- 👤 **个人中心**：我的发布、我的收藏、我的点赞、浏览历史
-- 🌓 **深色/浅色主题**一键切换
-- ⌨️ **快捷键**：`Ctrl+K` 聚焦搜索，`Esc` 关闭弹窗
+- 提示词数据存储在 GitHub 仓库 `data/prompts.json`，多设备同步
+- 支持 Pony Diffusion V6 XL、Animagine XL 3.1 等主流模型分类
+- 9 大分类：写实、动漫、插画、赛博朋克、国风、3D渲染、概念艺术、人像
+- 一键复制正向/负向提示词
+- 搜索、筛选、排序、标签系统
+- 点赞收藏（本地存储）
+- 深浅色主题切换
+- 管理员通过 GitHub Token 发布/编辑/删除提示词
+- 响应式设计，移动端适配
 
-### 后台管理（点击导航栏 ⚙️ 图标进入）
-- 📊 **仪表盘**：数据概览、热门TOP5、分类/模型分布图表
-- 📝 **提示词管理**：查看/编辑/删除所有提示词
-- 🏷️ **分类管理**：可视化新增/编辑/删除分类，自定义图标
-- 🤖 **模型管理**：新增/编辑/删除模型，设置HOT标签，自定义主题颜色
-- 💬 **评论管理**：查看/删除所有评论
-- 👥 **用户管理**：用户列表与统计
-- 💾 **数据备份**：导出JSON备份、导入恢复、重置默认数据
-- ⚙️ **系统设置**：网站名称/描述、每页数量、默认主题、功能开关
+## 部署到 GitHub Pages
 
-## 🚀 部署到 GitHub Pages
+1. 在 GitHub 创建仓库
+2. 将本目录所有文件（包括 `data/` 文件夹）上传到仓库根目录
+3. 仓库 Settings → Pages → Source 选择 `main` 分支 → Save
+4. 等待 1-2 分钟，访问 `https://你的用户名.github.io/仓库名/`
 
-### 方法一：直接上传（最简单）
+## 管理员使用
 
-1. 登录 GitHub，点击右上角 **+** → **New repository**
-2. 仓库名随意填（例如 `ai-prompt-forum`），选择 **Public**，点击 **Create repository**
-3. 在仓库页面点击 **uploading an existing file**
-4. 把本压缩包解压后的**所有文件**（`index.html`、`README.md`、`.nojekyll` 等）拖进去
-5. 点击 **Commit changes**
-6. 进入仓库 **Settings** → 左侧 **Pages**
-7. **Source** 选择 `Deploy from a branch`，**Branch** 选择 `main` / `(root)`，点击 **Save**
-8. 等待 1-2 分钟，页面上方会显示你的网站地址，例如：
-   `https://你的用户名.github.io/ai-prompt-forum/`
+1. 点击右上角齿轮图标进入管理后台
+2. 输入 GitHub Personal Access Token（classic，勾选 repo 权限）
+3. 验证成功后即可发布、编辑、删除提示词
+4. 每次保存会自动提交到 GitHub 仓库，GitHub Pages 会自动重新部署
 
-### 方法二：使用 GitHub Desktop
+## Token 创建方法
 
-1. 安装 [GitHub Desktop](https://desktop.github.com/)
-2. 登录后点击 **File** → **Add local repository**，选择解压后的文件夹
-3. 点击 **Publish repository** 发布到 GitHub
-4. 按方法一的第 6-8 步开启 Pages
+1. GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)
+2. Generate new token (classic)
+3. Note 随便填，Expiration 选 No expiration
+4. 勾选 `repo` 权限（完整仓库访问）
+5. Generate token → 复制保存（只显示一次）
 
-## 📁 项目结构
+## 文件结构
 
 ```
-ai-prompt-forum/
-├── index.html      # 主程序（单文件应用，包含所有HTML/CSS/JS）
-├── README.md       # 说明文档
-├── .nojekyll       # 告诉 GitHub Pages 跳过 Jekyll 处理
-└── .gitignore      # Git 忽略规则
+/
+├── index.html          # 主页面（所有代码）
+├── data/
+│   └── prompts.json    # 提示词数据（GitHub存储）
+├── .nojekyll           # 禁用Jekyll处理
+├── .gitignore
+└── README.md
 ```
 
-## 💾 数据说明
+## 注意事项
 
-- 所有数据（提示词、分类、模型、评论、设置、点赞收藏、浏览历史）存储在浏览器的 **localStorage** 中
-- 数据仅保存在当前浏览器，换浏览器或清除缓存会丢失
-- 建议定期在后台 **数据备份** 页面导出 JSON 文件做备份
-- 导出的 JSON 文件可在任意设备的后台导入恢复
-
-## 🎨 内置模型
-
-- Pony Diffusion V6 XL 🔥
-- Animagine XL 3.1 🔥
-- Midjourney
-- Stable Diffusion
-- DALL-E 3
-- Nijijourney
-
-可在后台 **模型管理** 中自由增删改。
-
-## 📝 内置分类
-
-写实、动漫、插画、赛博朋克、国风、3D渲染、概念艺术、人像
-
-可在后台 **分类管理** 中自由增删改。
-
-## 🔧 技术栈
-
-- 纯 HTML + CSS + JavaScript（单文件，无任何外部依赖）
-- 无需后端服务器，无需数据库
-- 支持所有现代浏览器（Chrome、Edge、Firefox、Safari）
-
-## 📄 License
-
-MIT
+- 普通访客无需登录即可浏览和复制提示词
+- 只有配置了 Token 的管理员可以发布/编辑/删除
+- 每次写入触发 GitHub Pages 重新部署，需等待 1-2 分钟
+- 点赞和收藏数据存在浏览器本地，换设备不互通

@@ -5,710 +5,316 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PromptHub · AI生图提示词论坛</title>
 <style>
-/* ========== 主题变量 ========== */
 :root {
-  --bg-primary: #0a0e1a;
-  --bg-secondary: #111827;
-  --bg-card: rgba(30, 41, 59, 0.6);
-  --bg-card-solid: #1e293b;
-  --bg-card-hover: rgba(51, 65, 85, 0.7);
-  --bg-input: rgba(0, 0, 0, 0.25);
-  --border: rgba(148, 163, 184, 0.15);
-  --border-hover: rgba(139, 92, 246, 0.4);
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --accent: #8b5cf6;
-  --accent-light: #a78bfa;
-  --accent-glow: rgba(139, 92, 246, 0.3);
-  --cyan: #06b6d4;
-  --pink: #ec4899;
-  --green: #10b981;
-  --orange: #f59e0b;
-  --red: #ef4444;
-  --yellow: #eab308;
-  --radius: 12px;
-  --radius-sm: 8px;
-  --shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
-  --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.2);
+  --bg-primary: #0a0e1a; --bg-secondary: #111827; --bg-card: rgba(30,41,59,0.6);
+  --bg-card-hover: rgba(51,65,85,0.7); --bg-input: rgba(0,0,0,0.25);
+  --border: rgba(148,163,184,0.15); --border-hover: rgba(139,92,246,0.4);
+  --text-primary: #f1f5f9; --text-secondary: #94a3b8; --text-muted: #64748b;
+  --accent: #8b5cf6; --accent-light: #a78bfa; --accent-glow: rgba(139,92,246,0.3);
+  --cyan: #06b6d4; --pink: #ec4899; --green: #10b981; --orange: #f59e0b; --red: #ef4444;
+  --radius: 12px; --radius-sm: 8px; --shadow: 0 4px 24px rgba(0,0,0,0.3);
+  --shadow-glow: 0 0 20px rgba(139,92,246,0.2);
 }
-
 body.light {
-  --bg-primary: #f8fafc;
-  --bg-secondary: #ffffff;
-  --bg-card: rgba(255, 255, 255, 0.9);
-  --bg-card-solid: #ffffff;
-  --bg-card-hover: rgba(241, 245, 249, 0.95);
-  --bg-input: rgba(0, 0, 0, 0.04);
-  --border: rgba(0, 0, 0, 0.1);
-  --border-hover: rgba(139, 92, 246, 0.5);
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
-  --shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  --bg-primary: #f8fafc; --bg-secondary: #ffffff; --bg-card: rgba(255,255,255,0.9);
+  --bg-card-hover: rgba(241,245,249,0.95); --bg-input: rgba(0,0,0,0.04);
+  --border: rgba(0,0,0,0.1); --text-primary: #0f172a; --text-secondary: #475569; --text-muted: #94a3b8;
+  --shadow: 0 4px 24px rgba(0,0,0,0.06);
 }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif; background:var(--bg-primary); color:var(--text-primary); line-height:1.6; min-height:100vh; overflow-x:hidden; transition:background 0.3s,color 0.3s; }
+body::before { content:''; position:fixed; top:-50%; left:-50%; width:200%; height:200%; background:radial-gradient(circle at 20% 30%,rgba(139,92,246,0.08) 0%,transparent 40%),radial-gradient(circle at 80% 70%,rgba(6,182,212,0.06) 0%,transparent 40%),radial-gradient(circle at 50% 50%,rgba(236,72,153,0.04) 0%,transparent 50%); z-index:-1; pointer-events:none; }
+body.light::before { opacity:0.4; }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+.navbar { position:sticky; top:0; z-index:100; background:var(--bg-secondary); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
+.nav-container { max-width:1400px; margin:0 auto; padding:0 24px; height:64px; display:flex; align-items:center; gap:16px; }
+.logo { display:flex; align-items:center; gap:10px; font-size:20px; font-weight:800; cursor:pointer; flex-shrink:0; }
+.logo-icon { width:36px; height:36px; background:linear-gradient(135deg,var(--accent),var(--cyan)); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:900; color:white; box-shadow:0 0 16px var(--accent-glow); }
+.logo-text { background:linear-gradient(135deg,var(--accent-light),var(--cyan)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.nav-search { flex:1; max-width:420px; position:relative; }
+.nav-search input { width:100%; height:40px; padding:0 16px 0 42px; background:var(--bg-input); border:1px solid var(--border); border-radius:20px; color:var(--text-primary); font-size:14px; outline:none; transition:all 0.3s; }
+.nav-search input:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-glow); }
+.nav-search input::placeholder { color:var(--text-muted); }
+.search-icon { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--text-muted); font-size:16px; }
+.nav-menu { display:flex; align-items:center; gap:2px; }
+.nav-item { padding:8px 14px; border-radius:var(--radius-sm); cursor:pointer; font-size:14px; color:var(--text-secondary); transition:all 0.2s; font-weight:500; }
+.nav-item:hover { color:var(--text-primary); background:var(--bg-card); }
+.nav-item.active { color:var(--accent-light); background:rgba(139,92,246,0.1); }
+.icon-btn { width:36px; height:36px; border-radius:50%; border:1px solid var(--border); background:var(--bg-card); color:var(--text-secondary); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:16px; transition:all 0.2s; flex-shrink:0; }
+.icon-btn:hover { border-color:var(--accent); color:var(--accent-light); }
+.icon-btn.active { border-color:var(--green); color:var(--green); }
+.btn-publish { padding:8px 18px; background:linear-gradient(135deg,var(--accent),#7c3aed); color:white; border:none; border-radius:20px; font-size:14px; font-weight:600; cursor:pointer; transition:all 0.3s; box-shadow:0 2px 12px var(--accent-glow); }
+.btn-publish:hover { transform:translateY(-1px); box-shadow:0 4px 20px var(--accent-glow); }
+.btn-publish:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  line-height: 1.6;
-  min-height: 100vh;
-  overflow-x: hidden;
-  transition: background 0.3s, color 0.3s;
-}
+.main-container { max-width:1400px; margin:0 auto; padding:24px; }
 
-body::before {
-  content: '';
-  position: fixed;
-  top: -50%; left: -50%;
-  width: 200%; height: 200%;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.06) 0%, transparent 40%),
-    radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.04) 0%, transparent 50%);
-  z-index: -1; pointer-events: none;
-}
+/* Loading */
+.loading-wrap { text-align:center; padding:80px 20px; color:var(--text-muted); }
+.loading-spinner { width:40px; height:40px; border:3px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin 1s linear infinite; margin:0 auto 16px; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.loading-text { font-size:14px; }
 
-body.light::before { opacity: 0.4; }
+/* Hero */
+.hero { background:linear-gradient(135deg,rgba(139,92,246,0.15),rgba(6,182,212,0.1)); border:1px solid var(--border); border-radius:16px; padding:36px; margin-bottom:24px; position:relative; overflow:hidden; }
+.hero::before { content:'P'; position:absolute; right:-20px; top:-40px; font-size:260px; font-weight:900; color:rgba(139,92,246,0.06); line-height:1; pointer-events:none; }
+.hero h1 { font-size:30px; font-weight:800; margin-bottom:8px; background:linear-gradient(135deg,var(--text-primary),var(--accent-light)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.hero p { font-size:14px; color:var(--text-secondary); max-width:600px; margin-bottom:18px; }
+.hero-stats { display:flex; gap:24px; flex-wrap:wrap; }
+.stat-item { display:flex; flex-direction:column; gap:2px; }
+.stat-num { font-size:20px; font-weight:800; color:var(--accent-light); }
+.stat-label { font-size:11px; color:var(--text-muted); }
+.hero-badge { display:inline-flex; align-items:center; gap:6px; padding:4px 12px; background:rgba(16,185,129,0.15); color:var(--green); border-radius:12px; font-size:12px; font-weight:600; margin-bottom:12px; }
 
-/* ========== 导航栏 ========== */
-.navbar {
-  position: sticky; top: 0; z-index: 100;
-  background: var(--bg-secondary);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-}
-.nav-container {
-  max-width: 1400px; margin: 0 auto; padding: 0 24px;
-  height: 64px; display: flex; align-items: center; gap: 20px;
-}
-.logo {
-  display: flex; align-items: center; gap: 10px;
-  font-size: 20px; font-weight: 800; cursor: pointer; flex-shrink: 0;
-}
-.logo-icon {
-  width: 36px; height: 36px;
-  background: linear-gradient(135deg, var(--accent), var(--cyan));
-  border-radius: 10px; display: flex; align-items: center; justify-content: center;
-  font-size: 18px; font-weight: 900; color: white;
-  box-shadow: 0 0 16px var(--accent-glow);
-}
-.logo-text {
-  background: linear-gradient(135deg, var(--accent-light), var(--cyan));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
-.nav-search { flex: 1; max-width: 480px; position: relative; }
-.nav-search input {
-  width: 100%; height: 40px; padding: 0 16px 0 42px;
-  background: var(--bg-input); border: 1px solid var(--border);
-  border-radius: 20px; color: var(--text-primary); font-size: 14px;
-  outline: none; transition: all 0.3s;
-}
-.nav-search input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
-.nav-search input::placeholder { color: var(--text-muted); }
-.search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 16px; }
-.nav-menu { display: flex; align-items: center; gap: 2px; }
-.nav-item {
-  padding: 8px 14px; border-radius: var(--radius-sm); cursor: pointer;
-  font-size: 14px; color: var(--text-secondary); transition: all 0.2s; font-weight: 500;
-}
-.nav-item:hover { color: var(--text-primary); background: var(--bg-card); }
-.nav-item.active { color: var(--accent-light); background: rgba(139, 92, 246, 0.1); }
-.icon-btn {
-  width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border);
-  background: var(--bg-card); color: var(--text-secondary); cursor: pointer;
-  display: flex; align-items: center; justify-content: center; font-size: 16px;
-  transition: all 0.2s; flex-shrink: 0;
-}
-.icon-btn:hover { border-color: var(--accent); color: var(--accent-light); }
-.btn-publish {
-  padding: 8px 20px; background: linear-gradient(135deg, var(--accent), #7c3aed);
-  color: white; border: none; border-radius: 20px; font-size: 14px; font-weight: 600;
-  cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 12px var(--accent-glow);
-}
-.btn-publish:hover { transform: translateY(-1px); box-shadow: 0 4px 20px var(--accent-glow); }
-.user-avatar {
-  width: 36px; height: 36px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--pink), var(--accent));
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 14px; cursor: pointer; color: white; flex-shrink: 0; transition: all 0.2s;
-}
-.user-avatar:hover { transform: scale(1.05); }
+.section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.section-title { font-size:18px; font-weight:700; display:flex; align-items:center; gap:10px; }
+.section-title::before { content:''; width:4px; height:18px; background:linear-gradient(180deg,var(--accent),var(--cyan)); border-radius:2px; }
+.section-more { font-size:13px; color:var(--text-muted); cursor:pointer; transition:color 0.2s; }
+.section-more:hover { color:var(--accent-light); }
 
-/* ========== 主内容 ========== */
-.main-container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+.category-bar { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+.cat-tag { padding:7px 16px; background:var(--bg-card); border:1px solid var(--border); border-radius:20px; font-size:13px; color:var(--text-secondary); cursor:pointer; transition:all 0.2s; font-weight:500; }
+.cat-tag:hover { border-color:var(--accent); color:var(--accent-light); }
+.cat-tag.active { background:linear-gradient(135deg,var(--accent),#7c3aed); border-color:transparent; color:white; box-shadow:0 2px 12px var(--accent-glow); }
 
-/* ========== 首页 Hero ========== */
-.hero {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(6, 182, 212, 0.1));
-  border: 1px solid var(--border); border-radius: 16px;
-  padding: 40px; margin-bottom: 28px; position: relative; overflow: hidden;
-}
-.hero::before {
-  content: 'P'; position: absolute; right: -20px; top: -40px;
-  font-size: 280px; font-weight: 900; color: rgba(139, 92, 246, 0.06);
-  line-height: 1; pointer-events: none;
-}
-.hero h1 {
-  font-size: 32px; font-weight: 800; margin-bottom: 10px;
-  background: linear-gradient(135deg, var(--text-primary), var(--accent-light));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
-.hero p { font-size: 15px; color: var(--text-secondary); max-width: 600px; margin-bottom: 20px; }
-.hero-stats { display: flex; gap: 28px; flex-wrap: wrap; }
-.stat-item { display: flex; flex-direction: column; gap: 2px; }
-.stat-num { font-size: 22px; font-weight: 800; color: var(--accent-light); }
-.stat-label { font-size: 12px; color: var(--text-muted); }
+.card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:14px; margin-bottom:24px; }
+.prompt-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:18px; cursor:pointer; transition:all 0.3s; position:relative; overflow:hidden; }
+.prompt-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--accent),var(--cyan)); opacity:0; transition:opacity 0.3s; }
+.prompt-card:hover { border-color:var(--border-hover); background:var(--bg-card-hover); transform:translateY(-2px); box-shadow:var(--shadow-glow); }
+.prompt-card:hover::before { opacity:1; }
+.card-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; gap:8px; flex-wrap:wrap; }
+.card-model { font-size:10px; font-weight:700; padding:3px 8px; border-radius:4px; text-transform:uppercase; letter-spacing:0.5px; white-space:nowrap; }
+.card-cat { font-size:12px; color:var(--text-muted); }
+.card-tags { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:8px; }
+.card-tag { font-size:10px; padding:2px 7px; border-radius:3px; background:rgba(139,92,246,0.1); color:var(--accent-light); }
+.card-title { font-size:15px; font-weight:700; margin-bottom:8px; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.card-prompt { font-size:12px; color:var(--text-secondary); line-height:1.6; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:12px; font-family:'SF Mono','Consolas','Monaco',monospace; background:var(--bg-input); padding:8px 10px; border-radius:var(--radius-sm); border-left:2px solid var(--accent); }
+.card-footer { display:flex; align-items:center; justify-content:space-between; }
+.card-author { display:flex; align-items:center; gap:8px; }
+.author-avatar { width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:white; flex-shrink:0; }
+.author-name { font-size:12px; color:var(--text-secondary); }
+.card-stats { display:flex; gap:12px; font-size:11px; color:var(--text-muted); }
+.stat-btn { display:flex; align-items:center; gap:3px; cursor:pointer; transition:color 0.2s; background:none; border:none; color:inherit; font-size:inherit; padding:0; }
+.stat-btn:hover { color:var(--accent-light); }
+.stat-btn.liked { color:var(--red); }
+.stat-btn.saved { color:var(--orange); }
 
-/* ========== 区块标题 ========== */
-.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-.section-title {
-  font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px;
-}
-.section-title::before {
-  content: ''; width: 4px; height: 18px;
-  background: linear-gradient(180deg, var(--accent), var(--cyan)); border-radius: 2px;
-}
-.section-more { font-size: 13px; color: var(--text-muted); cursor: pointer; transition: color 0.2s; }
-.section-more:hover { color: var(--accent-light); }
+.two-col { display:grid; grid-template-columns:1fr 300px; gap:20px; }
+.sidebar-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:18px; margin-bottom:14px; }
+.sidebar-title { font-size:14px; font-weight:700; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.sidebar-title::before { content:''; width:3px; height:13px; background:var(--accent); border-radius:2px; }
+.model-list { display:flex; flex-direction:column; gap:4px; }
+.model-item { display:flex; align-items:center; justify-content:space-between; padding:8px 10px; border-radius:var(--radius-sm); cursor:pointer; transition:all 0.2s; font-size:12px; }
+.model-item:hover { background:var(--bg-card-hover); }
+.model-item.active { background:rgba(139,92,246,0.1); color:var(--accent-light); }
+.model-name { display:flex; align-items:center; gap:6px; font-weight:500; min-width:0; }
+.model-name-text { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.model-count { font-size:11px; color:var(--text-muted); flex-shrink:0; }
+.hot-badge { font-size:8px; background:var(--red); color:white; padding:1px 4px; border-radius:3px; font-weight:700; flex-shrink:0; }
 
-/* ========== 分类标签 ========== */
-.category-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-.cat-tag {
-  padding: 7px 16px; background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: 20px; font-size: 13px; color: var(--text-secondary);
-  cursor: pointer; transition: all 0.2s; font-weight: 500;
-}
-.cat-tag:hover { border-color: var(--accent); color: var(--accent-light); }
-.cat-tag.active {
-  background: linear-gradient(135deg, var(--accent), #7c3aed);
-  border-color: transparent; color: white; box-shadow: 0 2px 12px var(--accent-glow);
-}
+/* 详情页 */
+.detail-header { background:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:28px; margin-bottom:16px; }
+.detail-meta { display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+.detail-title { font-size:24px; font-weight:800; margin-bottom:14px; line-height:1.3; }
+.detail-tags { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+.detail-tag { font-size:11px; padding:3px 10px; border-radius:4px; background:rgba(139,92,246,0.1); color:var(--accent-light); cursor:pointer; }
+.detail-tag:hover { background:rgba(139,92,246,0.2); }
+.detail-author-bar { display:flex; align-items:center; justify-content:space-between; padding-top:14px; border-top:1px solid var(--border); flex-wrap:wrap; gap:12px; }
+.detail-author { display:flex; align-items:center; gap:10px; }
+.detail-author .author-avatar { width:38px; height:38px; font-size:14px; }
+.detail-author .author-name { font-size:13px; font-weight:600; color:var(--text-primary); }
+.detail-date { font-size:11px; color:var(--text-muted); }
+.action-bar { display:flex; gap:8px; flex-wrap:wrap; }
+.action-btn { display:flex; align-items:center; gap:5px; padding:7px 14px; background:var(--bg-card); border:1px solid var(--border); border-radius:18px; color:var(--text-secondary); font-size:12px; cursor:pointer; transition:all 0.2s; }
+.action-btn:hover { border-color:var(--accent); color:var(--accent-light); }
+.action-btn.active { background:rgba(139,92,246,0.15); border-color:var(--accent); color:var(--accent-light); }
+.action-btn.liked { background:rgba(239,68,68,0.1); border-color:var(--red); color:var(--red); }
+.action-btn.saved { background:rgba(245,158,11,0.1); border-color:var(--orange); color:var(--orange); }
+.action-btn.danger { background:rgba(239,68,68,0.1); border-color:var(--red); color:var(--red); }
+.action-btn.danger:hover { background:rgba(239,68,68,0.2); }
+.btn-copy { background:linear-gradient(135deg,var(--accent),#7c3aed); border-color:transparent; color:white; }
+.btn-copy:hover { opacity:0.9; color:white; }
 
-/* ========== 卡片网格 ========== */
-.card-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 14px; margin-bottom: 28px;
-}
-.prompt-card {
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 18px; cursor: pointer;
-  transition: all 0.3s; position: relative; overflow: hidden;
-}
-.prompt-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, var(--accent), var(--cyan)); opacity: 0; transition: opacity 0.3s;
-}
-.prompt-card:hover {
-  border-color: var(--border-hover); background: var(--bg-card-hover);
-  transform: translateY(-2px); box-shadow: var(--shadow-glow);
-}
-.prompt-card:hover::before { opacity: 1; }
-.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; gap: 8px; flex-wrap: wrap; }
-.card-model {
-  font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px;
-  text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;
-}
-.card-cat { font-size: 12px; color: var(--text-muted); }
-.card-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
-.card-tag {
-  font-size: 10px; padding: 2px 7px; border-radius: 3px;
-  background: rgba(139, 92, 246, 0.1); color: var(--accent-light);
-}
-.card-title {
-  font-size: 15px; font-weight: 700; margin-bottom: 8px; line-height: 1.4;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-}
-.card-prompt {
-  font-size: 12px; color: var(--text-secondary); line-height: 1.6;
-  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
-  margin-bottom: 12px; font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
-  background: var(--bg-input); padding: 8px 10px; border-radius: var(--radius-sm);
-  border-left: 2px solid var(--accent);
-}
-.card-footer { display: flex; align-items: center; justify-content: space-between; }
-.card-author { display: flex; align-items: center; gap: 8px; }
-.author-avatar {
-  width: 26px; height: 26px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 700; color: white; flex-shrink: 0;
-}
-.author-name { font-size: 12px; color: var(--text-secondary); }
-.card-stats { display: flex; gap: 12px; font-size: 11px; color: var(--text-muted); }
-.stat-btn {
-  display: flex; align-items: center; gap: 3px; cursor: pointer;
-  transition: color 0.2s; background: none; border: none; color: inherit;
-  font-size: inherit; padding: 0;
-}
-.stat-btn:hover { color: var(--accent-light); }
-.stat-btn.liked { color: var(--red); }
-.stat-btn.saved { color: var(--orange); }
+.prompt-block { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; margin-bottom:14px; }
+.prompt-block-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.prompt-block-title { font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; }
+.prompt-block-title.negative { color:var(--red); }
+.prompt-text { font-family:'SF Mono','Consolas','Monaco',monospace; font-size:12px; line-height:1.8; color:var(--text-secondary); background:var(--bg-input); padding:14px; border-radius:var(--radius-sm); border-left:3px solid var(--accent); word-break:break-all; white-space:pre-wrap; }
+.prompt-text.negative { border-left-color:var(--red); }
 
-/* ========== 双栏布局 ========== */
-.two-col { display: grid; grid-template-columns: 1fr 300px; gap: 20px; }
+.params-section { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); margin-bottom:14px; overflow:hidden; }
+.params-header { padding:14px 18px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; font-size:13px; font-weight:600; transition:background 0.2s; }
+.params-header:hover { background:var(--bg-card-hover); }
+.params-body { padding:0 18px 18px; display:none; }
+.params-body.open { display:block; }
+.params-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:10px; }
+.param-item { background:var(--bg-input); padding:8px 12px; border-radius:var(--radius-sm); }
+.param-label { font-size:10px; color:var(--text-muted); margin-bottom:2px; }
+.param-value { font-size:12px; font-weight:600; font-family:monospace; }
 
-/* ========== 侧边栏 ========== */
-.sidebar-card {
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 18px; margin-bottom: 14px;
-}
-.sidebar-title {
-  font-size: 14px; font-weight: 700; margin-bottom: 12px;
-  display: flex; align-items: center; gap: 8px;
-}
-.sidebar-title::before { content: ''; width: 3px; height: 13px; background: var(--accent); border-radius: 2px; }
-.model-list { display: flex; flex-direction: column; gap: 4px; }
-.model-item {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 8px 10px; border-radius: var(--radius-sm); cursor: pointer;
-  transition: all 0.2s; font-size: 12px;
-}
-.model-item:hover { background: var(--bg-card-hover); }
-.model-item.active { background: rgba(139, 92, 246, 0.1); color: var(--accent-light); }
-.model-name { display: flex; align-items: center; gap: 6px; font-weight: 500; min-width: 0; }
-.model-name-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.model-count { font-size: 11px; color: var(--text-muted); flex-shrink: 0; }
-.hot-badge {
-  font-size: 8px; background: var(--red); color: white;
-  padding: 1px 4px; border-radius: 3px; font-weight: 700; flex-shrink: 0;
-}
-.user-list { display: flex; flex-direction: column; gap: 8px; }
-.user-row {
-  display: flex; align-items: center; gap: 8px; cursor: pointer;
-  padding: 4px; border-radius: var(--radius-sm); transition: background 0.2s;
-}
-.user-row:hover { background: var(--bg-card-hover); }
-.user-info { flex: 1; min-width: 0; }
-.user-name-sm { font-size: 12px; font-weight: 600; }
-.user-bio { font-size: 10px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.user-rank { font-size: 11px; font-weight: 800; color: var(--text-muted); width: 16px; text-align: center; flex-shrink: 0; }
-.user-rank.top1 { color: var(--orange); }
-.user-rank.top2 { color: var(--text-secondary); }
-.user-rank.top3 { color: #cd7f32; }
+.related-section { margin-top:20px; }
+.related-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px; }
 
-/* ========== 详情页 ========== */
-.detail-header {
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: 16px; padding: 28px; margin-bottom: 16px;
-}
-.detail-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
-.detail-title { font-size: 24px; font-weight: 800; margin-bottom: 14px; line-height: 1.3; }
-.detail-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
-.detail-tag {
-  font-size: 11px; padding: 3px 10px; border-radius: 4px;
-  background: rgba(139, 92, 246, 0.1); color: var(--accent-light); cursor: pointer;
-}
-.detail-tag:hover { background: rgba(139, 92, 246, 0.2); }
-.detail-author-bar {
-  display: flex; align-items: center; justify-content: space-between;
-  padding-top: 14px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 12px;
-}
-.detail-author { display: flex; align-items: center; gap: 10px; }
-.detail-author .author-avatar { width: 38px; height: 38px; font-size: 14px; }
-.detail-author .author-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
-.detail-date { font-size: 11px; color: var(--text-muted); }
-.action-bar { display: flex; gap: 8px; flex-wrap: wrap; }
-.action-btn {
-  display: flex; align-items: center; gap: 5px; padding: 7px 14px;
-  background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px;
-  color: var(--text-secondary); font-size: 12px; cursor: pointer; transition: all 0.2s;
-}
-.action-btn:hover { border-color: var(--accent); color: var(--accent-light); }
-.action-btn.active { background: rgba(139, 92, 246, 0.15); border-color: var(--accent); color: var(--accent-light); }
-.action-btn.liked { background: rgba(239, 68, 68, 0.1); border-color: var(--red); color: var(--red); }
-.action-btn.saved { background: rgba(245, 158, 11, 0.1); border-color: var(--orange); color: var(--orange); }
-.btn-copy { background: linear-gradient(135deg, var(--accent), #7c3aed); border-color: transparent; color: white; }
-.btn-copy:hover { opacity: 0.9; color: white; }
+/* 表单 */
+.form-container { max-width:820px; margin:0 auto; }
+.form-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:24px; margin-bottom:16px; }
+.form-group-title { font-size:15px; font-weight:700; margin-bottom:16px; display:flex; align-items:center; gap:8px; padding-bottom:10px; border-bottom:1px solid var(--border); }
+.form-group-title .num { width:22px; height:22px; background:linear-gradient(135deg,var(--accent),var(--cyan)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; color:white; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+.form-field { margin-bottom:14px; }
+.form-label { display:block; font-size:12px; font-weight:600; color:var(--text-secondary); margin-bottom:5px; }
+.form-label .req { color:var(--red); margin-left:2px; }
+.form-input, .form-select, .form-textarea { width:100%; padding:9px 12px; background:var(--bg-input); border:1px solid var(--border); border-radius:var(--radius-sm); color:var(--text-primary); font-size:13px; outline:none; transition:border-color 0.2s; font-family:inherit; }
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-glow); }
+.form-textarea { resize:vertical; min-height:100px; font-family:'SF Mono','Consolas',monospace; font-size:12px; line-height:1.7; }
+.form-select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:32px; }
+.form-select option { background:var(--bg-secondary); color:var(--text-primary); }
+.form-hint { font-size:11px; color:var(--text-muted); margin-top:3px; }
+.tag-input-area { display:flex; flex-wrap:wrap; gap:6px; padding:8px; background:var(--bg-input); border:1px solid var(--border); border-radius:var(--radius-sm); min-height:42px; align-items:center; }
+.tag-chip { display:flex; align-items:center; gap:4px; padding:3px 8px; background:rgba(139,92,246,0.15); color:var(--accent-light); border-radius:4px; font-size:12px; }
+.tag-chip-remove { cursor:pointer; font-weight:bold; opacity:0.7; }
+.tag-chip-remove:hover { opacity:1; }
+.tag-input-field { flex:1; min-width:100px; border:none; background:transparent; color:var(--text-primary); font-size:12px; outline:none; }
+.form-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:20px; flex-wrap:wrap; }
+.btn-submit { padding:10px 28px; background:linear-gradient(135deg,var(--accent),#7c3aed); color:white; border:none; border-radius:var(--radius-sm); font-size:14px; font-weight:700; cursor:pointer; transition:all 0.3s; box-shadow:0 2px 12px var(--accent-glow); }
+.btn-submit:hover { transform:translateY(-1px); box-shadow:0 4px 20px var(--accent-glow); }
+.btn-submit:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+.btn-cancel { padding:10px 20px; background:var(--bg-card); border:1px solid var(--border); color:var(--text-secondary); border-radius:var(--radius-sm); font-size:14px; cursor:pointer; transition:all 0.2s; }
+.btn-cancel:hover { border-color:var(--text-muted); color:var(--text-primary); }
+.btn-danger { padding:10px 20px; background:rgba(239,68,68,0.1); border:1px solid var(--red); color:var(--red); border-radius:var(--radius-sm); font-size:14px; cursor:pointer; transition:all 0.2s; }
+.btn-danger:hover { background:rgba(239,68,68,0.2); }
 
-.prompt-block {
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 20px; margin-bottom: 14px;
-}
-.prompt-block-header {
-  display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;
-}
-.prompt-block-title { font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
-.prompt-block-title.negative { color: var(--red); }
-.prompt-text {
-  font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
-  font-size: 12px; line-height: 1.8; color: var(--text-secondary);
-  background: var(--bg-input); padding: 14px; border-radius: var(--radius-sm);
-  border-left: 3px solid var(--accent); word-break: break-all; white-space: pre-wrap;
-}
-.prompt-text.negative { border-left-color: var(--red); }
+/* 筛选栏 */
+.filter-bar { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:10px; }
+.filter-left { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.sort-select { padding:7px 12px; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); color:var(--text-secondary); font-size:12px; outline:none; cursor:pointer; }
+.view-toggle { display:flex; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); overflow:hidden; }
+.view-btn { padding:7px 12px; font-size:12px; color:var(--text-muted); cursor:pointer; border:none; background:none; transition:all 0.2s; }
+.view-btn.active { background:var(--accent); color:white; }
+.result-count { font-size:12px; color:var(--text-muted); }
 
-.params-section {
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: var(--radius); margin-bottom: 14px; overflow: hidden;
-}
-.params-header {
-  padding: 14px 18px; display: flex; align-items: center; justify-content: space-between;
-  cursor: pointer; font-size: 13px; font-weight: 600; transition: background 0.2s;
-}
-.params-header:hover { background: var(--bg-card-hover); }
-.params-body { padding: 0 18px 18px; display: none; }
-.params-body.open { display: block; }
-.params-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
-.param-item { background: var(--bg-input); padding: 8px 12px; border-radius: var(--radius-sm); }
-.param-label { font-size: 10px; color: var(--text-muted); margin-bottom: 2px; }
-.param-value { font-size: 12px; font-weight: 600; font-family: monospace; }
-
-/* 相关推荐 */
-.related-section { margin-top: 20px; }
-.related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
-
-/* ========== 评论区 ========== */
-.comments-section {
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 20px;
-}
-.comment-input-area { display: flex; gap: 10px; margin-bottom: 20px; }
-.comment-input {
-  flex: 1; background: var(--bg-input); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 10px 14px; color: var(--text-primary);
-  font-size: 13px; outline: none; resize: vertical; min-height: 54px;
-  font-family: inherit; transition: border-color 0.2s;
-}
-.comment-input:focus { border-color: var(--accent); }
-.btn-comment {
-  padding: 0 18px; background: linear-gradient(135deg, var(--accent), #7c3aed);
-  color: white; border: none; border-radius: var(--radius-sm); font-size: 13px;
-  font-weight: 600; cursor: pointer; align-self: flex-end; height: 38px; transition: opacity 0.2s;
-}
-.btn-comment:hover { opacity: 0.9; }
-.comment-list { display: flex; flex-direction: column; gap: 16px; }
-.comment-item { display: flex; gap: 10px; }
-.comment-body { flex: 1; min-width: 0; }
-.comment-head { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; flex-wrap: wrap; }
-.comment-author { font-size: 12px; font-weight: 600; }
-.comment-time { font-size: 10px; color: var(--text-muted); }
-.comment-text { font-size: 13px; color: var(--text-secondary); line-height: 1.6; word-break: break-word; }
-.comment-actions { display: flex; gap: 12px; margin-top: 4px; }
-.comment-action-btn { font-size: 11px; color: var(--text-muted); cursor: pointer; background: none; border: none; padding: 0; }
-.comment-action-btn:hover { color: var(--accent-light); }
-.comment-action-btn.danger:hover { color: var(--red); }
-
-/* ========== 发布页/表单 ========== */
-.form-container { max-width: 820px; margin: 0 auto; }
-.form-card {
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 24px; margin-bottom: 16px;
-}
-.form-group-title {
-  font-size: 15px; font-weight: 700; margin-bottom: 16px;
-  display: flex; align-items: center; gap: 8px;
-  padding-bottom: 10px; border-bottom: 1px solid var(--border);
-}
-.form-group-title .num {
-  width: 22px; height: 22px; background: linear-gradient(135deg, var(--accent), var(--cyan));
-  border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 800; color: white;
-}
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
-.form-field { margin-bottom: 14px; }
-.form-label { display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 5px; }
-.form-label .req { color: var(--red); margin-left: 2px; }
-.form-input, .form-select, .form-textarea {
-  width: 100%; padding: 9px 12px; background: var(--bg-input);
-  border: 1px solid var(--border); border-radius: var(--radius-sm);
-  color: var(--text-primary); font-size: 13px; outline: none;
-  transition: border-color 0.2s; font-family: inherit;
-}
-.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
-.form-textarea { resize: vertical; min-height: 100px; font-family: 'SF Mono', 'Consolas', monospace; font-size: 12px; line-height: 1.7; }
-.form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
-.form-select option { background: var(--bg-secondary); color: var(--text-primary); }
-.form-hint { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
-.tag-input-area { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px; background: var(--bg-input); border: 1px solid var(--border); border-radius: var(--radius-sm); min-height: 42px; align-items: center; }
-.tag-chip { display: flex; align-items: center; gap: 4px; padding: 3px 8px; background: rgba(139, 92, 246, 0.15); color: var(--accent-light); border-radius: 4px; font-size: 12px; }
-.tag-chip-remove { cursor: pointer; font-weight: bold; opacity: 0.7; }
-.tag-chip-remove:hover { opacity: 1; }
-.tag-input-field { flex: 1; min-width: 100px; border: none; background: transparent; color: var(--text-primary); font-size: 12px; outline: none; }
-.form-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
-.btn-submit {
-  padding: 10px 28px; background: linear-gradient(135deg, var(--accent), #7c3aed);
-  color: white; border: none; border-radius: var(--radius-sm); font-size: 14px;
-  font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 12px var(--accent-glow);
-}
-.btn-submit:hover { transform: translateY(-1px); box-shadow: 0 4px 20px var(--accent-glow); }
-.btn-cancel {
-  padding: 10px 20px; background: var(--bg-card); border: 1px solid var(--border);
-  color: var(--text-secondary); border-radius: var(--radius-sm); font-size: 14px;
-  cursor: pointer; transition: all 0.2s;
-}
-.btn-cancel:hover { border-color: var(--text-muted); color: var(--text-primary); }
-.btn-danger {
-  padding: 10px 20px; background: rgba(239, 68, 68, 0.1); border: 1px solid var(--red);
-  color: var(--red); border-radius: var(--radius-sm); font-size: 14px;
-  cursor: pointer; transition: all 0.2s;
-}
-.btn-danger:hover { background: rgba(239, 68, 68, 0.2); }
-
-/* ========== 个人中心 ========== */
-.profile-header {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(6, 182, 212, 0.1));
-  border: 1px solid var(--border); border-radius: 16px;
-  padding: 28px; margin-bottom: 20px; position: relative; overflow: hidden;
-}
-.profile-header::before {
-  content: 'U'; position: absolute; right: 20px; top: -20px;
-  font-size: 180px; font-weight: 900; color: rgba(139, 92, 246, 0.08); pointer-events: none;
-}
-.profile-info { display: flex; align-items: center; gap: 20px; position: relative; z-index: 1; flex-wrap: wrap; }
-.profile-avatar {
-  width: 72px; height: 72px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--pink), var(--accent));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 28px; font-weight: 800; color: white; box-shadow: 0 0 24px var(--accent-glow);
-}
-.profile-detail h2 { font-size: 22px; font-weight: 800; margin-bottom: 3px; }
-.profile-bio { font-size: 13px; color: var(--text-secondary); margin-bottom: 10px; }
-.profile-stats { display: flex; gap: 24px; flex-wrap: wrap; }
-.profile-stat { text-align: center; }
-.profile-stat-num { font-size: 18px; font-weight: 800; color: var(--accent-light); }
-.profile-stat-label { font-size: 11px; color: var(--text-muted); }
-
-.tab-bar { display: flex; gap: 2px; margin-bottom: 18px; border-bottom: 1px solid var(--border); overflow-x: auto; }
-.tab-item {
-  padding: 10px 18px; font-size: 13px; font-weight: 600; color: var(--text-muted);
-  cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;
-  margin-bottom: -1px; white-space: nowrap;
-}
-.tab-item:hover { color: var(--text-secondary); }
-.tab-item.active { color: var(--accent-light); border-bottom-color: var(--accent); }
-
-/* ========== 筛选栏 ========== */
-.filter-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
-.filter-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.sort-select {
-  padding: 7px 12px; background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); color: var(--text-secondary); font-size: 12px; outline: none; cursor: pointer;
-}
-.view-toggle { display: flex; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
-.view-btn {
-  padding: 7px 12px; font-size: 12px; color: var(--text-muted); cursor: pointer;
-  border: none; background: none; transition: all 0.2s;
-}
-.view-btn.active { background: var(--accent); color: white; }
-.result-count { font-size: 12px; color: var(--text-muted); }
-
-/* 列表视图 */
-.list-view { display: flex; flex-direction: column; gap: 10px; }
-.list-item {
-  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 16px; cursor: pointer; transition: all 0.2s; display: flex; gap: 14px;
-}
-.list-item:hover { border-color: var(--border-hover); background: var(--bg-card-hover); }
-.list-main { flex: 1; min-width: 0; }
-.list-title { font-size: 14px; font-weight: 700; margin-bottom: 5px; }
-.list-prompt {
-  font-size: 11px; color: var(--text-muted); font-family: monospace;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-}
-.list-side { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
-
-/* ========== 后台管理 ========== */
-.admin-layout { display: grid; grid-template-columns: 220px 1fr; gap: 20px; min-height: calc(100vh - 120px); }
-.admin-sidebar {
-  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 16px 10px; height: fit-content; position: sticky; top: 80px;
-}
-.admin-brand {
-  display: flex; align-items: center; gap: 8px; padding: 8px 10px;
-  margin-bottom: 12px; font-size: 14px; font-weight: 700;
-  color: var(--accent-light); border-bottom: 1px solid var(--border); padding-bottom: 14px;
-}
-.admin-nav-item {
-  display: flex; align-items: center; gap: 10px; padding: 9px 12px;
-  border-radius: var(--radius-sm); cursor: pointer; font-size: 13px;
-  color: var(--text-secondary); transition: all 0.2s; margin-bottom: 2px;
-}
-.admin-nav-item:hover { background: var(--bg-card-hover); color: var(--text-primary); }
-.admin-nav-item.active { background: rgba(139, 92, 246, 0.15); color: var(--accent-light); font-weight: 600; }
-.admin-nav-icon { font-size: 15px; width: 18px; text-align: center; }
-.admin-content { min-width: 0; }
-.admin-page-title { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
-.admin-page-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; }
-
-/* 仪表盘卡片 */
-.dash-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-bottom: 20px; }
-.dash-card {
-  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 18px; position: relative; overflow: hidden;
-}
-.dash-card-icon {
-  position: absolute; right: 12px; top: 12px; font-size: 28px; opacity: 0.15;
-}
-.dash-card-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
-.dash-card-value { font-size: 26px; font-weight: 800; }
-.dash-card-trend { font-size: 11px; color: var(--green); margin-top: 4px; }
-
-/* 管理表格 */
-.admin-table-wrap {
-  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
-  overflow: hidden;
-}
-.admin-table-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 18px; border-bottom: 1px solid var(--border);
-}
-.admin-table-title { font-size: 14px; font-weight: 700; }
-.admin-table { width: 100%; border-collapse: collapse; }
-.admin-table th {
-  text-align: left; padding: 10px 18px; font-size: 11px; font-weight: 700;
-  color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;
-  background: var(--bg-input); border-bottom: 1px solid var(--border);
-}
-.admin-table td { padding: 12px 18px; font-size: 13px; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
-.admin-table tr:last-child td { border-bottom: none; }
-.admin-table tr:hover td { background: var(--bg-card-hover); }
-.table-model-badge { font-size: 10px; padding: 2px 6px; border-radius: 3px; font-weight: 700; }
-.table-actions { display: flex; gap: 6px; }
-.table-action-btn {
-  padding: 4px 10px; font-size: 11px; border-radius: 4px; cursor: pointer;
-  border: 1px solid var(--border); background: var(--bg-card); color: var(--text-secondary);
-  transition: all 0.2s;
-}
-.table-action-btn:hover { border-color: var(--accent); color: var(--accent-light); }
-.table-action-btn.danger:hover { border-color: var(--red); color: var(--red); background: rgba(239, 68, 68, 0.1); }
-.table-action-btn.primary { background: rgba(139, 92, 246, 0.1); border-color: var(--accent); color: var(--accent-light); }
-
-/* 模态框 */
-.modal-overlay {
-  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px);
-  z-index: 1000; display: flex; align-items: center; justify-content: center;
-  padding: 20px;
-}
-.modal {
-  background: var(--bg-secondary); border: 1px solid var(--border);
-  border-radius: 16px; width: 100%; max-width: 560px; max-height: 90vh;
-  overflow-y: auto; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-}
-.modal-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 18px 22px; border-bottom: 1px solid var(--border);
-}
-.modal-title { font-size: 16px; font-weight: 700; }
-.modal-close {
-  width: 28px; height: 28px; border-radius: 50%; border: none;
-  background: var(--bg-card); color: var(--text-muted); cursor: pointer;
-  font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
-}
-.modal-close:hover { background: var(--red); color: white; }
-.modal-body { padding: 20px 22px; }
-.modal-footer {
-  display: flex; justify-content: flex-end; gap: 10px;
-  padding: 14px 22px; border-top: 1px solid var(--border);
-}
-
-/* 颜色选择器 */
-.color-picker-row { display: flex; gap: 8px; flex-wrap: wrap; }
-.color-swatch {
-  width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
-  border: 2px solid transparent; transition: all 0.2s;
-}
-.color-swatch:hover { transform: scale(1.1); }
-.color-swatch.selected { border-color: var(--text-primary); box-shadow: 0 0 0 2px var(--bg-secondary); }
-
-/* 开关 */
-.switch {
-  position: relative; display: inline-block; width: 40px; height: 22px;
-}
-.switch input { opacity: 0; width: 0; height: 0; }
-.switch-slider {
-  position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-  background-color: var(--border); transition: 0.3s; border-radius: 22px;
-}
-.switch-slider:before {
-  position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px;
-  background-color: white; transition: 0.3s; border-radius: 50%;
-}
-.switch input:checked + .switch-slider { background-color: var(--accent); }
-.switch input:checked + .switch-slider:before { transform: translateX(18px); }
-
-/* Toast */
-.toast {
-  position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-20px);
-  background: var(--bg-secondary); border: 1px solid var(--accent);
-  color: var(--text-primary); padding: 10px 20px; border-radius: var(--radius-sm);
-  font-size: 13px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4); z-index: 2000;
-  opacity: 0; transition: all 0.3s; pointer-events: none;
-}
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-.toast.error { border-color: var(--red); }
-.toast.success { border-color: var(--green); }
+.list-view { display:flex; flex-direction:column; gap:10px; }
+.list-item { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:16px; cursor:pointer; transition:all 0.2s; display:flex; gap:14px; }
+.list-item:hover { border-color:var(--border-hover); background:var(--bg-card-hover); }
+.list-main { flex:1; min-width:0; }
+.list-title { font-size:14px; font-weight:700; margin-bottom:5px; }
+.list-prompt { font-size:11px; color:var(--text-muted); font-family:monospace; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.list-side { display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex-shrink:0; }
 
 /* 空状态 */
-.empty-state { text-align: center; padding: 50px 20px; color: var(--text-muted); }
-.empty-icon { font-size: 42px; margin-bottom: 12px; opacity: 0.5; }
-.empty-text { font-size: 14px; margin-bottom: 6px; }
-.empty-hint { font-size: 12px; }
+.empty-state { text-align:center; padding:50px 20px; color:var(--text-muted); }
+.empty-icon { font-size:42px; margin-bottom:12px; opacity:0.5; }
+.empty-text { font-size:14px; margin-bottom:6px; }
+.empty-hint { font-size:12px; margin-bottom:16px; }
+.empty-action { padding:8px 20px; background:linear-gradient(135deg,var(--accent),#7c3aed); color:white; border:none; border-radius:20px; font-size:13px; font-weight:600; cursor:pointer; }
 
-/* 浏览历史 */
-.history-chip {
-  display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px;
-  background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
-  font-size: 11px; color: var(--text-secondary); cursor: pointer; transition: all 0.2s;
-  margin: 2px;
-}
-.history-chip:hover { border-color: var(--accent); color: var(--accent-light); }
+/* 模态框 */
+.modal-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(4px); z-index:1000; display:flex; align-items:center; justify-content:center; padding:20px; animation:fadeIn 0.2s; }
+@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+.modal { background:var(--bg-secondary); border:1px solid var(--border); border-radius:16px; width:100%; max-width:440px; max-height:90vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,0.5); animation:modalIn 0.25s; }
+@keyframes modalIn { from{opacity:0;transform:scale(0.95) translateY(10px);} to{opacity:1;transform:scale(1) translateY(0);} }
+.modal-header { display:flex; align-items:center; justify-content:space-between; padding:18px 22px; border-bottom:1px solid var(--border); }
+.modal-title { font-size:16px; font-weight:700; }
+.modal-close { width:28px; height:28px; border-radius:50%; border:none; background:var(--bg-card); color:var(--text-muted); cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+.modal-close:hover { background:var(--red); color:white; }
+.modal-body { padding:22px; }
+.modal-footer { display:flex; justify-content:flex-end; gap:10px; padding:14px 22px; border-top:1px solid var(--border); }
 
-/* 分页 */
-.pagination { display: flex; justify-content: center; gap: 4px; margin-top: 20px; }
-.page-btn {
-  min-width: 32px; height: 32px; padding: 0 8px; border-radius: 6px;
-  border: 1px solid var(--border); background: var(--bg-card); color: var(--text-secondary);
-  cursor: pointer; font-size: 12px; transition: all 0.2s;
-}
-.page-btn:hover { border-color: var(--accent); color: var(--accent-light); }
-.page-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
-.page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.auth-field { margin-bottom:14px; }
+.auth-label { display:block; font-size:12px; font-weight:600; color:var(--text-secondary); margin-bottom:5px; }
+.auth-input { width:100%; padding:10px 14px; background:var(--bg-input); border:1px solid var(--border); border-radius:var(--radius-sm); color:var(--text-primary); font-size:14px; outline:none; transition:border-color 0.2s; font-family:monospace; }
+.auth-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-glow); }
+.auth-error { font-size:12px; color:var(--red); margin-top:6px; min-height:16px; }
+.auth-submit { width:100%; padding:12px; background:linear-gradient(135deg,var(--accent),#7c3aed); color:white; border:none; border-radius:var(--radius-sm); font-size:15px; font-weight:700; cursor:pointer; transition:all 0.3s; box-shadow:0 2px 12px var(--accent-glow); margin-top:6px; }
+.auth-submit:hover { transform:translateY(-1px); box-shadow:0 4px 20px var(--accent-glow); }
+.auth-submit:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+.auth-hint { font-size:12px; color:var(--text-muted); text-align:center; margin-top:14px; line-height:1.6; }
+.auth-hint .link { color:var(--accent-light); cursor:pointer; text-decoration:underline; }
 
-/* 滚动条 */
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: var(--bg-primary); }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+.confirm-icon { font-size:40px; text-align:center; margin-bottom:12px; }
+.confirm-title { font-size:17px; font-weight:700; text-align:center; margin-bottom:8px; }
+.confirm-text { font-size:13px; color:var(--text-secondary); text-align:center; margin-bottom:20px; line-height:1.6; }
+.confirm-actions { display:flex; gap:10px; }
+.confirm-actions button { flex:1; }
 
-/* 响应式 */
-@media (max-width: 1024px) {
-  .two-col { grid-template-columns: 1fr; }
-  .sidebar { display: none; }
-  .admin-layout { grid-template-columns: 1fr; }
-  .admin-sidebar { position: static; display: flex; overflow-x: auto; padding: 10px; gap: 4px; }
-  .admin-brand { display: none; }
-  .admin-nav-item { white-space: nowrap; margin-bottom: 0; }
+/* Toast */
+.toast { position:fixed; top:80px; left:50%; transform:translateX(-50%) translateY(-20px); background:var(--bg-secondary); border:1px solid var(--accent); color:var(--text-primary); padding:10px 20px; border-radius:var(--radius-sm); font-size:13px; box-shadow:0 4px 20px rgba(0,0,0,0.4); z-index:2000; opacity:0; transition:all 0.3s; pointer-events:none; }
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+.toast.error { border-color:var(--red); }
+.toast.success { border-color:var(--green); }
+
+/* 管理后台 */
+.admin-layout { display:grid; grid-template-columns:220px 1fr; gap:20px; min-height:calc(100vh - 120px); }
+.admin-sidebar { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:16px 10px; height:fit-content; position:sticky; top:80px; }
+.admin-brand { display:flex; align-items:center; gap:8px; padding:8px 10px; margin-bottom:12px; font-size:14px; font-weight:700; color:var(--accent-light); border-bottom:1px solid var(--border); padding-bottom:14px; }
+.admin-nav-item { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:var(--radius-sm); cursor:pointer; font-size:13px; color:var(--text-secondary); transition:all 0.2s; margin-bottom:2px; }
+.admin-nav-item:hover { background:var(--bg-card-hover); color:var(--text-primary); }
+.admin-nav-item.active { background:rgba(139,92,246,0.15); color:var(--accent-light); font-weight:600; }
+.admin-nav-icon { font-size:15px; width:18px; text-align:center; }
+.admin-content { min-width:0; }
+.admin-page-title { font-size:20px; font-weight:800; margin-bottom:4px; }
+.admin-page-desc { font-size:13px; color:var(--text-muted); margin-bottom:18px; }
+
+.admin-table-wrap { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-bottom:16px; }
+.admin-table-header { display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--border); }
+.admin-table-title { font-size:14px; font-weight:700; }
+.admin-table { width:100%; border-collapse:collapse; }
+.admin-table th { text-align:left; padding:10px 18px; font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; background:var(--bg-input); border-bottom:1px solid var(--border); }
+.admin-table td { padding:12px 18px; font-size:13px; border-bottom:1px solid var(--border); color:var(--text-secondary); }
+.admin-table tr:last-child td { border-bottom:none; }
+.admin-table tr:hover td { background:var(--bg-card-hover); }
+.table-model-badge { font-size:10px; padding:2px 6px; border-radius:3px; font-weight:700; }
+.table-actions { display:flex; gap:6px; flex-wrap:wrap; }
+.table-action-btn { padding:4px 10px; font-size:11px; border-radius:4px; cursor:pointer; border:1px solid var(--border); background:var(--bg-card); color:var(--text-secondary); transition:all 0.2s; }
+.table-action-btn:hover { border-color:var(--accent); color:var(--accent-light); }
+.table-action-btn.danger:hover { border-color:var(--red); color:var(--red); background:rgba(239,68,68,0.1); }
+.table-action-btn.primary { background:rgba(139,92,246,0.1); border-color:var(--accent); color:var(--accent-light); }
+
+.config-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:24px; margin-bottom:16px; }
+.config-row { display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--border); }
+.config-row:last-child { border-bottom:none; }
+.config-label { font-size:13px; font-weight:600; }
+.config-value { font-size:12px; color:var(--text-muted); font-family:monospace; max-width:300px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.config-status { display:inline-flex; align-items:center; gap:6px; padding:3px 10px; border-radius:10px; font-size:11px; font-weight:600; }
+.config-status.online { background:rgba(16,185,129,0.15); color:var(--green); }
+.config-status.offline { background:rgba(239,68,68,0.15); color:var(--red); }
+
+::-webkit-scrollbar { width:8px; height:8px; }
+::-webkit-scrollbar-track { background:var(--bg-primary); }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
+::-webkit-scrollbar-thumb:hover { background:var(--text-muted); }
+
+@media (max-width:1024px) {
+  .two-col { grid-template-columns:1fr; }
+  .sidebar { display:none; }
+  .admin-layout { grid-template-columns:1fr; }
+  .admin-sidebar { position:static; display:flex; overflow-x:auto; padding:10px; gap:4px; }
+  .admin-brand { display:none; }
+  .admin-nav-item { white-space:nowrap; margin-bottom:0; }
 }
-@media (max-width: 768px) {
-  .nav-menu .nav-item { display: none; }
-  .hero { padding: 28px 20px; }
-  .hero h1 { font-size: 24px; }
-  .card-grid { grid-template-columns: 1fr; }
-  .form-row { grid-template-columns: 1fr; }
-  .profile-info { flex-direction: column; text-align: center; }
-  .profile-stats { justify-content: center; }
-  .detail-header, .prompt-block, .comments-section { padding: 18px; }
-  .detail-title { font-size: 20px; }
-  .action-bar { flex-wrap: wrap; }
-  .admin-table { font-size: 11px; }
-  .admin-table th, .admin-table td { padding: 8px 10px; }
+@media (max-width:768px) {
+  .nav-menu .nav-item { display:none; }
+  .nav-search { display:none; }
+  .hero { padding:28px 20px; }
+  .hero h1 { font-size:24px; }
+  .card-grid { grid-template-columns:1fr; }
+  .form-row { grid-template-columns:1fr; }
+  .detail-header, .prompt-block { padding:18px; }
+  .detail-title { font-size:20px; }
+  .action-bar { flex-wrap:wrap; }
+  .admin-table { font-size:11px; }
+  .admin-table th, .admin-table td { padding:8px 10px; }
 }
-@media (max-width: 480px) {
-  .nav-container { padding: 0 12px; gap: 8px; }
-  .logo-text { display: none; }
-  .main-container { padding: 14px; }
-  .btn-publish { padding: 7px 14px; font-size: 12px; }
+@media (max-width:480px) {
+  .nav-container { padding:0 12px; gap:8px; }
+  .logo-text { display:none; }
+  .main-container { padding:14px; }
+  .btn-publish { padding:7px 14px; font-size:12px; }
 }
 </style>
 </head>
 <body>
 
-<!-- 导航栏 -->
 <nav class="navbar">
   <div class="nav-container">
     <div class="logo" onclick="navigate('home')">
@@ -722,387 +328,336 @@ body.light::before { opacity: 0.4; }
     <div class="nav-menu">
       <div class="nav-item active" data-page="home" onclick="navigate('home')">首页</div>
       <div class="nav-item" data-page="discover" onclick="navigate('discover')">发现</div>
-      <div class="nav-item" data-page="profile" onclick="navigate('profile')">我的</div>
     </div>
     <button class="icon-btn" onclick="toggleTheme()" title="切换主题">&#9790;</button>
-    <button class="icon-btn" onclick="navigate('admin')" title="后台管理">&#9881;</button>
-    <button class="btn-publish" onclick="navigate('publish')">+ 发布</button>
-    <div class="user-avatar" onclick="navigate('profile')">我</div>
+    <button class="icon-btn" id="adminBtn" onclick="navigate('admin')" title="管理后台">&#9881;</button>
+    <button class="btn-publish" id="publishBtn" onclick="navigate('publish')" disabled>+ 发布</button>
   </div>
 </nav>
 
-<!-- 主内容区 -->
-<main class="main-container" id="app"></main>
+<main class="main-container" id="app">
+  <div class="loading-wrap">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">正在从 GitHub 加载数据...</div>
+  </div>
+</main>
 
-<!-- 模态框容器 -->
 <div id="modalContainer"></div>
-
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ==================== 默认数据 ====================
-const DEFAULT_CATEGORIES = [
-  { id: 'realistic', name: '写实', icon: '📷' },
-  { id: 'anime', name: '动漫', icon: '🎨' },
-  { id: 'illustration', name: '插画', icon: '🖌️' },
-  { id: 'cyberpunk', name: '赛博朋克', icon: '🌃' },
-  { id: 'chinese', name: '国风', icon: '🏮' },
-  { id: '3d', name: '3D渲染', icon: '🧊' },
-  { id: 'concept', name: '概念艺术', icon: '🗿' },
-  { id: 'portrait', name: '人像', icon: '👤' },
-];
-
-const DEFAULT_MODELS = [
-  { id: 'pony', name: 'Pony Diffusion V6 XL', short: 'Pony V6', hot: true, color: '#ec4899' },
-  { id: 'animagine', name: 'Animagine XL 3.1', short: 'Animagine 3.1', hot: true, color: '#06b6d4' },
-  { id: 'midjourney', name: 'Midjourney', short: 'MJ', hot: false, color: '#8b5cf6' },
-  { id: 'sd', name: 'Stable Diffusion', short: 'SD', hot: false, color: '#10b981' },
-  { id: 'dalle', name: 'DALL-E 3', short: 'DALL-E', hot: false, color: '#f59e0b' },
-  { id: 'nijijourney', name: 'Nijijourney', short: 'Niji', hot: false, color: '#ef4444' },
-];
-
-const DEFAULT_USERS = [
-  { id: 'u1', name: 'PixelMaster', avatar: 'P', color: 'linear-gradient(135deg, #8b5cf6, #06b6d4)', bio: '专注赛博朋克与概念艺术', posts: 42, likes: 1280 },
-  { id: 'u2', name: 'AnimeDreamer', avatar: 'A', color: 'linear-gradient(135deg, #ec4899, #f59e0b)', bio: '日漫风格深度研究者', posts: 38, likes: 956 },
-  { id: 'u3', name: 'RealismPro', avatar: 'R', color: 'linear-gradient(135deg, #10b981, #06b6d4)', bio: '写实人像摄影师转AI', posts: 31, likes: 842 },
-  { id: 'u4', name: 'InkPainter', avatar: 'I', color: 'linear-gradient(135deg, #f59e0b, #ef4444)', bio: '国风水墨爱好者', posts: 27, likes: 720 },
-  { id: 'u5', name: 'CyberWitch', avatar: 'C', color: 'linear-gradient(135deg, #8b5cf6, #ec4899)', bio: '霓虹灯下的魔法师', posts: 24, likes: 658 },
-  { id: 'u6', name: '3DArchitect', avatar: '3', color: 'linear-gradient(135deg, #06b6d4, #10b981)', bio: '建筑可视化设计师', posts: 19, likes: 512 },
-  { id: 'me', name: '我', avatar: '我', color: 'linear-gradient(135deg, #ec4899, #8b5cf6)', bio: '这个账号是我自己', posts: 0, likes: 0 },
-];
-
-const DEFAULT_PROMPTS = [
-  { id:'p1', title:'赛博朋克雨夜街头少女，霓虹灯光反射', prompt:'masterpiece, best quality, 1girl, solo, cyberpunk, rain, neon lights, reflection, wet street, jacket, looking at viewer, city background, night, cinematic lighting, depth of field, highly detailed, 8k', negative:'lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry', category:'cyberpunk', model:'pony', author:'u1', tags:['赛博朋克','雨夜','霓虹','少女'], params:{sampler:'DPM++ 2M Karras',steps:30,cfg:7,size:'832x1216',seed:'1234567890'}, likes:342, saves:128, comments:3, date:'2026-08-18' },
-  { id:'p2', title:'动漫风格夏日海边少女，蓝天白云', prompt:'masterpiece, best quality, 1girl, solo, summer, beach, ocean, blue sky, white clouds, sundress, straw hat, smile, looking at viewer, wind, hair flowing, seagulls, sunlight, vibrant colors, anime style, studio ghibli inspired', negative:'worst quality, low quality, bad anatomy, bad hands, missing fingers, extra fingers, deformed, blurry, text, watermark, signature', category:'anime', model:'animagine', author:'u2', tags:['动漫','夏日','海边','少女'], params:{sampler:'Euler a',steps:28,cfg:6,size:'832x1216',seed:'9876543210'}, likes:289, saves:156, comments:2, date:'2026-08-17' },
-  { id:'p3', title:'超写实东方女性人像，柔光摄影棚', prompt:'photorealistic, portrait of a beautiful east asian woman, soft studio lighting, rim light, detailed skin texture, pores, natural makeup, dark hair, elegant, looking at camera, shallow depth of field, 85mm lens, f/1.8, professional photography, hyperrealistic', negative:'cartoon, anime, drawing, painting, illustration, 3d render, deformed, bad anatomy, extra limbs, missing limbs, bad hands, fused fingers, too many fingers, long neck, mutation, ugly, blurry, text, watermark', category:'portrait', model:'sd', author:'u3', tags:['写实','人像','摄影棚','东方女性'], params:{sampler:'DPM++ SDE Karras',steps:35,cfg:5.5,size:'768x1024',seed:'5555555555'}, likes:456, saves:203, comments:3, date:'2026-08-16' },
-  { id:'p4', title:'国风水墨山水，孤舟蓑笠翁', prompt:'traditional chinese ink painting, shan shui landscape, misty mountains, lone boat, old fisherman with straw hat, willow trees, river, calligraphy style, minimalist, black and white with subtle color, song dynasty style, atmospheric perspective, serene', negative:'photorealistic, 3d, modern, colorful, western style, cartoon, anime, text, watermark, signature, blurry, low quality', category:'chinese', model:'midjourney', author:'u4', tags:['国风','水墨','山水','意境'], params:{sampler:'N/A',steps:'N/A',cfg:'N/A',size:'1024x1024',seed:'N/A'}, likes:198, saves:87, comments:0, date:'2026-08-15' },
-  { id:'p5', title:'赛博朋克城市全景，飞行汽车，巨型全息广告', prompt:'cyberpunk cityscape, panoramic view, flying cars, giant holographic advertisements, neon signs, skyscrapers, night, rain, reflections, crowded streets, futuristic, blade runner style, cinematic, ultra detailed, 8k, concept art', negative:'low quality, blurry, text, watermark, signature, daytime, sunny, natural lighting, simple, minimalist', category:'cyberpunk', model:'midjourney', author:'u1', tags:['赛博朋克','城市','全景','飞行汽车'], params:{sampler:'N/A',steps:'N/A',cfg:'N/A',size:'1792x1024',seed:'N/A'}, likes:521, saves:234, comments:0, date:'2026-08-14' },
-  { id:'p6', title:'动漫魔法少女变身瞬间，华丽特效', prompt:'masterpiece, best quality, 1girl, magical girl, transformation scene, frilled dress, ribbons, sparkles, magical energy, glowing, pink and blue theme, twin tails, thigh highs, boots, elaborate costume, dynamic pose, anime style, vibrant, detailed background, cardcaptor sakura inspired', negative:'worst quality, low quality, bad anatomy, bad hands, missing fingers, extra fingers, deformed, blurry, text, watermark, realistic, 3d', category:'anime', model:'animagine', author:'u2', tags:['动漫','魔法少女','变身','特效'], params:{sampler:'DPM++ 2M Karras',steps:30,cfg:7,size:'832x1216',seed:'1111111111'}, likes:378, saves:189, comments:0, date:'2026-08-13' },
-  { id:'p7', title:'3D渲染未来主义建筑，参数化设计', prompt:'3d render, futuristic architecture, parametric design, organic shapes, flowing curves, glass and steel structure, interior view, natural lighting, minimalist, zaha hadid style, octane render, unreal engine 5, photorealistic, 8k, architectural visualization', negative:'2d, drawing, sketch, cartoon, low poly, bad lighting, overexposed, underexposed, text, watermark', category:'3d', model:'sd', author:'u6', tags:['3D','建筑','参数化','未来主义'], params:{sampler:'DPM++ 2M Karras',steps:32,cfg:6.5,size:'1024x768',seed:'2222222222'}, likes:167, saves:72, comments:0, date:'2026-08-12' },
-  { id:'p8', title:'奇幻概念艺术，巨龙盘旋于古堡', prompt:'concept art, fantasy landscape, giant dragon circling ancient castle, mountain peak, dramatic clouds, sunset lighting, epic scale, detailed architecture, scales reflecting light, wings spread, cinematic composition, artstation trending, greg rutkowski style, highly detailed, matte painting', negative:'photorealistic, 3d render, cartoon, anime, modern, text, watermark, signature, low quality, blurry, simple background', category:'concept', model:'midjourney', author:'u5', tags:['概念艺术','奇幻','巨龙','古堡'], params:{sampler:'N/A',steps:'N/A',cfg:'N/A',size:'1024x1024',seed:'N/A'}, likes:445, saves:198, comments:0, date:'2026-08-11' },
-  { id:'p9', title:'Pony风格校园JK制服少女，教室场景', prompt:'masterpiece, best quality, 1girl, solo, school uniform, jk, white shirt, plaid skirt, red bowtie, classroom, desk, window, afternoon sunlight, looking at viewer, gentle smile, short hair, hairclip, detailed background, depth of field, warm tones', negative:'worst quality, low quality, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, text, watermark, signature, blurry, nsfw', category:'anime', model:'pony', author:'u2', tags:['Pony','JK','校园','少女'], params:{sampler:'DPM++ 2M Karras',steps:28,cfg:6,size:'832x1216',seed:'3333333333'}, likes:512, saves:267, comments:2, date:'2026-08-10' },
-  { id:'p10', title:'写实街头时尚摄影，东京原宿', prompt:'photorealistic street fashion photography, young woman, harajuku style, layered clothing, colorful, tokyo street background, neon signs, candid shot, natural lighting, 35mm lens, film grain, editorial fashion, vogue style, detailed textures', negative:'cartoon, anime, drawing, painting, illustration, 3d, studio, plain background, bad anatomy, deformed, blurry, text, watermark', category:'portrait', model:'sd', author:'u3', tags:['写实','街拍','时尚','原宿'], params:{sampler:'DPM++ SDE Karras',steps:35,cfg:5,size:'768x1024',seed:'4444444444'}, likes:234, saves:112, comments:0, date:'2026-08-09' },
-  { id:'p11', title:'国风仙侠女子，飘逸长裙，云雾缭绕', prompt:'chinese xianxia style, beautiful woman, flowing hanfu dress, long sleeves, ethereal, clouds and mist, mountain peak, lotus, hair ornaments, jade jewelry, elegant pose, ink wash painting influence, soft colors, dreamy, mythical, celestial being', negative:'photorealistic, 3d, modern clothing, western style, cartoon, anime, text, watermark, signature, low quality, blurry, nsfw', category:'chinese', model:'animagine', author:'u4', tags:['国风','仙侠','飘逸','意境'], params:{sampler:'Euler a',steps:30,cfg:6.5,size:'832x1216',seed:'6666666666'}, likes:389, saves:178, comments:0, date:'2026-08-08' },
-  { id:'p12', title:'赛博朋克义体改造人，机械手臂，霓虹', prompt:'masterpiece, best quality, 1boy, solo, cyberpunk, cyborg, mechanical arm, cybernetic implants, glowing eyes, leather jacket, urban alley, neon lights, rain, steam, dramatic lighting, detailed machinery, wires, metallic textures, ghost in the shell inspired', negative:'lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, jpeg artifacts, signature, watermark, blurry, cartoon, anime', category:'cyberpunk', model:'pony', author:'u1', tags:['赛博朋克','义体','机械臂','改造人'], params:{sampler:'DPM++ 2M Karras',steps:32,cfg:7.5,size:'832x1216',seed:'7777777777'}, likes:467, saves:212, comments:1, date:'2026-08-07' },
-  { id:'p13', title:'扁平插画风格，咖啡馆阅读时光', prompt:'flat illustration, cozy coffee shop, person reading book at table, coffee cup, plants, warm lighting, window, bookshelf, minimalist style, limited color palette, terracotta and cream tones, vector style, modern illustration, peaceful atmosphere', negative:'photorealistic, 3d, detailed, complex, realistic, text, watermark, signature, low quality', category:'illustration', model:'dalle', author:'u5', tags:['插画','扁平','咖啡馆','生活'], params:{sampler:'N/A',steps:'N/A',cfg:'N/A',size:'1024x1024',seed:'N/A'}, likes:156, saves:68, comments:0, date:'2026-08-06' },
-  { id:'p14', title:'Niji风格奇幻冒险小队，森林场景', prompt:'anime style, fantasy adventure party, 4 characters, warrior, mage, archer, healer, enchanted forest, magical creatures, glowing mushrooms, dynamic composition, vibrant colors, detailed backgrounds, studio ghibli meets makoto shinkai, epic atmosphere', negative:'worst quality, low quality, bad anatomy, bad hands, missing fingers, extra fingers, deformed, blurry, text, watermark, realistic, 3d, photo', category:'concept', model:'nijijourney', author:'u2', tags:['Niji','奇幻','冒险','小队'], params:{sampler:'N/A',steps:'N/A',cfg:'N/A',size:'1024x1024',seed:'N/A'}, likes:298, saves:145, comments:0, date:'2026-08-05' },
-  { id:'p15', title:'超写实微距摄影，露珠中的花朵', prompt:'macro photography, water droplet on flower petal, reflection inside droplet, extreme close-up, dewdrop, morning light, bokeh background, sharp focus, nature photography, nikon macro lens, f/2.8, highly detailed, vibrant colors, professional', negative:'cartoon, anime, drawing, painting, illustration, 3d render, blurry, out of focus, text, watermark, signature, low quality, bad lighting', category:'realistic', model:'sd', author:'u3', tags:['写实','微距','摄影','自然'], params:{sampler:'DPM++ SDE Karras',steps:40,cfg:4.5,size:'1024x1024',seed:'8888888888'}, likes:187, saves:82, comments:0, date:'2026-08-04' },
-  { id:'p16', title:'Animagine猫耳少女，慵懒午后', prompt:'masterpiece, best quality, 1girl, solo, cat ears, cat tail, nekomimi, long hair, white hair, blue eyes, sweater, thigh highs, lying on couch, pillow, lazy afternoon, sunlight through window, dust particles, cozy, warm, looking at viewer, blush, anime style', negative:'worst quality, low quality, bad anatomy, bad hands, missing fingers, extra fingers, deformed, blurry, text, watermark, signature, realistic, 3d, photo, nsfw', category:'anime', model:'animagine', author:'u2', tags:['Animagine','猫耳','少女','日常'], params:{sampler:'Euler a',steps:28,cfg:6,size:'832x1216',seed:'9999999999'}, likes:423, saves:234, comments:0, date:'2026-08-03' },
-  { id:'p17', title:'Pony风格机甲少女，科幻战斗场景', prompt:'masterpiece, best quality, 1girl, solo, mecha musume, mechanical armor, glowing parts, sci-fi, battlefield, explosions, debris, dynamic pose, holding weapon, serious expression, short hair, headgear, detailed machinery, cinematic lighting, smoke, sparks', negative:'worst quality, low quality, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, text, watermark, signature, blurry, nsfw, peaceful, calm', category:'cyberpunk', model:'pony', author:'u1', tags:['Pony','机甲','少女','战斗'], params:{sampler:'DPM++ 2M Karras',steps:30,cfg:7,size:'832x1216',seed:'1010101010'}, likes:356, saves:167, comments:0, date:'2026-08-02' },
-];
-
-const DEFAULT_COMMENTS = {
-  'p1': [
-    { id:'c1', author:'u2', text:'这个光影效果绝了，复制试了一下出图率很高！', time:'2小时前' },
-    { id:'c2', author:'u3', text:'建议把CFG调到6.5，细节会更柔和一些', time:'5小时前' },
-    { id:'c3', author:'u5', text:'收藏了，雨夜赛博朋克永远的神', time:'1天前' },
-  ],
-  'p2': [
-    { id:'c4', author:'u1', text:'吉卜力那味儿出来了，好评', time:'3小时前' },
-    { id:'c5', author:'u4', text:'加个 lens flare 关键词会不会更有夏天的感觉', time:'8小时前' },
-  ],
-  'p3': [
-    { id:'c6', author:'u1', text:'皮肤纹理太真实了，用的什么模型？', time:'1小时前' },
-    { id:'c7', author:'u6', text:'85mm镜头参数很专业，学习了', time:'6小时前' },
-    { id:'c8', author:'u2', text:'想问下负面提示词里加cartoon有用吗', time:'1天前' },
-  ],
-  'p9': [
-    { id:'c9', author:'u1', text:'Pony跑JK确实有一手', time:'4小时前' },
-    { id:'c10', author:'u5', text:'教室背景细节很到位', time:'12小时前' },
-  ],
-  'p12': [
-    { id:'c11', author:'u3', text:'机械臂的金属质感渲染得很棒', time:'2小时前' },
-  ],
+// ==================== 配置 ====================
+const GITHUB_CONFIG = {
+  owner: 'gv5ptm6tz7-create',
+  repo: '1111',
+  branch: 'main',
+  dataPath: 'data/prompts.json',
 };
 
-const DEFAULT_SETTINGS = {
-  siteName: 'PromptHub',
-  siteDesc: '发现最优质的 AI 生图提示词',
-  theme: 'dark',
-  itemsPerPage: 12,
-  showHistory: true,
-};
+const CATEGORIES = [
+  { id:'all', name:'全部', icon:'📋' },
+  { id:'realistic', name:'写实', icon:'📷' },
+  { id:'anime', name:'动漫', icon:'🎨' },
+  { id:'illustration', name:'插画', icon:'🖌️' },
+  { id:'cyberpunk', name:'赛博朋克', icon:'🌃' },
+  { id:'chinese', name:'国风', icon:'🏮' },
+  { id:'3d', name:'3D渲染', icon:'🧊' },
+  { id:'concept', name:'概念艺术', icon:'🗿' },
+  { id:'portrait', name:'人像', icon:'👤' },
+];
 
-// ==================== 状态管理 ====================
+const MODELS = [
+  { id:'pony', name:'Pony Diffusion V6 XL', short:'Pony V6', hot:true, color:'#ec4899' },
+  { id:'animagine', name:'Animagine XL 3.1', short:'Animagine 3.1', hot:true, color:'#06b6d4' },
+  { id:'midjourney', name:'Midjourney', short:'MJ', hot:false, color:'#8b5cf6' },
+  { id:'sd', name:'Stable Diffusion', short:'SD', hot:false, color:'#10b981' },
+  { id:'dalle', name:'DALL-E 3', short:'DALL-E', hot:false, color:'#f59e0b' },
+  { id:'nijijourney', name:'Nijijourney', short:'Niji', hot:false, color:'#ef4444' },
+];
+
+// ==================== 状态 ====================
 let state = {
   currentPage: 'home',
   currentPromptId: null,
   adminTab: 'dashboard',
-  filters: { category: 'all', model: 'all', sort: 'hot', search: '', tag: '' },
+  filters: { category:'all', model:'all', sort:'hot', search:'', tag:'' },
   viewMode: 'grid',
-  profileTab: 'posts',
   currentPage_num: 1,
   prompts: [],
-  comments: {},
-  categories: [],
-  models: [],
-  users: [],
-  settings: {},
+  dataSha: null,
+  lastUpdated: null,
+  isAdmin: false,
+  githubToken: null,
   likedIds: new Set(),
   savedIds: new Set(),
-  history: [],
+  formTags: [],
   editingPromptId: null,
+  dataLoaded: false,
+  loadError: null,
 };
 
-function loadState() {
-  const saved = localStorage.getItem('prompthub_v2');
+// ==================== 本地存储 ====================
+function loadLocalData() {
+  const saved = localStorage.getItem('prompthub_github');
   if (saved) {
     try {
       const data = JSON.parse(saved);
-      state.prompts = data.prompts || [];
-      state.comments = data.comments || {};
-      state.categories = data.categories || [];
-      state.models = data.models || [];
-      state.users = data.users || [];
-      state.settings = { ...DEFAULT_SETTINGS, ...(data.settings || {}) };
+      state.githubToken = data.githubToken || null;
+      state.isAdmin = data.isAdmin || false;
       state.likedIds = new Set(data.likedIds || []);
       state.savedIds = new Set(data.savedIds || []);
-      state.history = data.history || [];
-    } catch(e) {
-      initDefaultData();
-    }
-  } else {
-    initDefaultData();
+    } catch(e) {}
   }
-  // 确保数据完整性
-  if (!state.categories.length) state.categories = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
-  if (!state.models.length) state.models = JSON.parse(JSON.stringify(DEFAULT_MODELS));
-  if (!state.users.length) state.users = JSON.parse(JSON.stringify(DEFAULT_USERS));
-  if (!state.prompts.length) state.prompts = JSON.parse(JSON.stringify(DEFAULT_PROMPTS));
-  if (!Object.keys(state.comments).length) state.comments = JSON.parse(JSON.stringify(DEFAULT_COMMENTS));
-  if (!state.settings.siteName) state.settings = { ...DEFAULT_SETTINGS };
 }
 
-function initDefaultData() {
-  state.prompts = JSON.parse(JSON.stringify(DEFAULT_PROMPTS));
-  state.comments = JSON.parse(JSON.stringify(DEFAULT_COMMENTS));
-  state.categories = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
-  state.models = JSON.parse(JSON.stringify(DEFAULT_MODELS));
-  state.users = JSON.parse(JSON.stringify(DEFAULT_USERS));
-  state.settings = { ...DEFAULT_SETTINGS };
-  state.likedIds = new Set();
-  state.savedIds = new Set();
-  state.history = [];
-}
-
-function saveState() {
-  localStorage.setItem('prompthub_v2', JSON.stringify({
-    prompts: state.prompts,
-    comments: state.comments,
-    categories: state.categories,
-    models: state.models,
-    users: state.users,
-    settings: state.settings,
+function saveLocalData() {
+  localStorage.setItem('prompthub_github', JSON.stringify({
+    githubToken: state.githubToken,
+    isAdmin: state.isAdmin,
     likedIds: [...state.likedIds],
     savedIds: [...state.savedIds],
-    history: state.history.slice(0, 50),
   }));
 }
 
+// ==================== GitHub API ====================
+const apiBase = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}`;
+
+async function fetchPromptsFromGitHub() {
+  try {
+    const url = `${apiBase}/contents/${GITHUB_CONFIG.dataPath}?ref=${GITHUB_CONFIG.branch}`;
+    const headers = { 'Accept': 'application/vnd.github.v3+json' };
+    if (state.githubToken) headers['Authorization'] = `token ${state.githubToken}`;
+    const res = await fetch(url, { headers });
+    if (res.status === 404) {
+      // 文件不存在，使用空数据
+      state.prompts = [];
+      state.dataSha = null;
+      state.dataLoaded = true;
+      return true;
+    }
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    state.dataSha = data.sha;
+    const content = decodeURIComponent(escape(atob(data.content)));
+    const parsed = JSON.parse(content);
+    state.prompts = parsed.prompts || [];
+    state.lastUpdated = parsed.lastUpdated || null;
+    state.dataLoaded = true;
+    state.loadError = null;
+    return true;
+  } catch(e) {
+    state.loadError = e.message;
+    state.dataLoaded = true;
+    return false;
+  }
+}
+
+async function savePromptsToGitHub(commitMessage) {
+  if (!state.githubToken) { showToast('需要管理员Token', 'error'); return false; }
+  try {
+    const payload = {
+      prompts: state.prompts,
+      lastUpdated: new Date().toISOString(),
+    };
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
+    const body = {
+      message: commitMessage || 'Update prompts data',
+      content: content,
+      branch: GITHUB_CONFIG.branch,
+    };
+    if (state.dataSha) body.sha = state.dataSha;
+    const res = await fetch(`${apiBase}/contents/${GITHUB_CONFIG.dataPath}`, {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/vnd.github.v3+json',
+        'Authorization': `token ${state.githubToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || `HTTP ${res.status}`);
+    }
+    const data = await res.json();
+    state.dataSha = data.content.sha;
+    return true;
+  } catch(e) {
+    showToast('保存失败: ' + e.message, 'error');
+    return false;
+  }
+}
+
+async function verifyToken(token) {
+  try {
+    const res = await fetch(`${apiBase}`, {
+      headers: {
+        'Accept': 'application/vnd.github.v3+json',
+        'Authorization': `token ${token}`,
+      },
+    });
+    if (res.status === 401 || res.status === 403) return { valid:false, msg:'Token无效或无权限' };
+    if (!res.ok) return { valid:false, msg:`HTTP ${res.status}` };
+    const repo = await res.json();
+    const hasPush = repo.permissions && repo.permissions.push;
+    return { valid:true, msg: hasPush ? '验证成功，有写入权限' : '验证成功，但无写入权限（可能无法发布）' };
+  } catch(e) {
+    return { valid:false, msg:'网络错误: ' + e.message };
+  }
+}
+
 // ==================== 工具函数 ====================
-function getUser(id) { return state.users.find(u => u.id === id) || state.users[state.users.length-1]; }
-function getCategory(id) { return state.categories.find(c => c.id === id) || { id:'unknown', name:'未分类', icon:'❓' }; }
-function getModel(id) { return state.models.find(m => m.id === id) || { id:'other', name:'其他', short:'Other', hot:false, color:'#64748b' }; }
+function getCategory(id) { return CATEGORIES.find(c => c.id === id) || { id:'unknown', name:'未分类', icon:'❓' }; }
+function getModel(id) { return MODELS.find(m => m.id === id) || { id:'other', name:'其他', short:'Other', hot:false, color:'#64748b' }; }
 function escapeHtml(str) { const div = document.createElement('div'); div.textContent = str; return div.innerHTML; }
 function genId(prefix) { return prefix + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5); }
 
 function showToast(msg, type='') {
   const toast = document.getElementById('toast');
-  toast.textContent = msg;
-  toast.className = 'toast show ' + type;
-  setTimeout(() => toast.className = 'toast ' + type, 2000);
+  toast.textContent = msg; toast.className = 'toast show ' + type;
+  setTimeout(() => toast.className = 'toast ' + type, 2500);
 }
 
 function copyToClipboard(text) {
   navigator.clipboard.writeText(text).then(() => showToast('Prompt 已复制到剪贴板', 'success'))
-    .catch(() => {
-      const ta = document.createElement('textarea');
-      ta.value = text; document.body.appendChild(ta); ta.select();
-      document.execCommand('copy'); document.body.removeChild(ta);
-      showToast('Prompt 已复制到剪贴板', 'success');
-    });
+    .catch(() => { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); showToast('Prompt 已复制到剪贴板', 'success'); });
 }
 
-function addToHistory(promptId) {
-  if (!state.settings.showHistory) return;
-  state.history = state.history.filter(id => id !== promptId);
-  state.history.unshift(promptId);
-  if (state.history.length > 50) state.history = state.history.slice(0, 50);
-  saveState();
-}
-
-// ==================== 主题 ====================
 function toggleTheme() {
-  state.settings.theme = state.settings.theme === 'dark' ? 'light' : 'dark';
-  applyTheme();
-  saveState();
+  const isLight = document.body.classList.toggle('light');
+  localStorage.setItem('prompthub_theme', isLight ? 'light' : 'dark');
 }
 function applyTheme() {
-  document.body.classList.toggle('light', state.settings.theme === 'light');
-  document.getElementById('siteName').textContent = state.settings.siteName;
+  const theme = localStorage.getItem('prompthub_theme') || 'dark';
+  document.body.classList.toggle('light', theme === 'light');
+}
+
+function updateNavState() {
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.page === state.currentPage));
+  const publishBtn = document.getElementById('publishBtn');
+  const adminBtn = document.getElementById('adminBtn');
+  if (state.isAdmin) {
+    publishBtn.disabled = false;
+    adminBtn.classList.add('active');
+    adminBtn.title = '管理后台（已登录）';
+  } else {
+    publishBtn.disabled = true;
+    adminBtn.classList.remove('active');
+    adminBtn.title = '管理员登录';
+  }
 }
 
 // ==================== 导航 ====================
 function navigate(page, params = {}) {
+  if (page === 'publish' && !state.isAdmin) { showAdminLogin(); return; }
+  if (page === 'admin' && !state.isAdmin) { showAdminLogin(); return; }
   state.currentPage = page;
-  if (params.promptId) { state.currentPromptId = params.promptId; addToHistory(params.promptId); }
+  if (params.promptId) state.currentPromptId = params.promptId;
   if (params.adminTab) state.adminTab = params.adminTab;
   if (params.filters) state.filters = { ...state.filters, ...params.filters };
   if (params.editId) state.editingPromptId = params.editId;
-
-  document.querySelectorAll('.nav-item').forEach(el => {
-    el.classList.toggle('active', el.dataset.page === page);
-  });
   document.getElementById('globalSearch').value = state.filters.search || '';
   state.currentPage_num = 1;
-  window.scrollTo(0, 0);
-  closeModal();
-  render();
+  window.scrollTo(0, 0); closeModal(); render();
 }
 
 function handleSearch(val) {
-  state.filters.search = val;
-  state.currentPage_num = 1;
-  if (state.currentPage !== 'discover') navigate('discover');
-  else render();
+  state.filters.search = val; state.currentPage_num = 1;
+  if (state.currentPage !== 'discover') navigate('discover'); else render();
 }
 
 // ==================== 渲染主入口 ====================
 function render() {
+  updateNavState();
   const app = document.getElementById('app');
+  if (!state.dataLoaded) {
+    app.innerHTML = `<div class="loading-wrap"><div class="loading-spinner"></div><div class="loading-text">正在从 GitHub 加载数据...</div></div>`;
+    return;
+  }
+  if (state.loadError && state.prompts.length === 0) {
+    app.innerHTML = `<div class="empty-state">
+      <div class="empty-icon">⚠️</div>
+      <div class="empty-text">数据加载失败</div>
+      <div class="empty-hint">错误: ${escapeHtml(state.loadError)}<br>请检查网络连接，或确认仓库中存在 data/prompts.json 文件</div>
+      <button class="empty-action" onclick="reloadData()">重新加载</button>
+    </div>`;
+    return;
+  }
   switch (state.currentPage) {
     case 'home': app.innerHTML = renderHome(); break;
     case 'discover': app.innerHTML = renderDiscover(); break;
     case 'detail': app.innerHTML = renderDetail(); break;
     case 'publish': app.innerHTML = renderPublish(); break;
-    case 'profile': app.innerHTML = renderProfile(); break;
     case 'admin': app.innerHTML = renderAdmin(); break;
     default: app.innerHTML = renderHome();
   }
+}
+
+async function reloadData() {
+  state.dataLoaded = false;
+  state.loadError = null;
+  render();
+  await fetchPromptsFromGitHub();
+  render();
 }
 
 // ==================== 首页 ====================
 function renderHome() {
   const hotPrompts = [...state.prompts].sort((a,b) => b.likes - a.likes).slice(0, 6);
   const newPrompts = [...state.prompts].sort((a,b) => b.date.localeCompare(a.date)).slice(0, 4);
-  const topUsers = [...state.users].filter(u => u.id !== 'me').sort((a,b) => b.likes - a.likes).slice(0, 5);
   const totalLikes = state.prompts.reduce((s,p) => s+p.likes, 0);
-  const totalComments = Object.values(state.comments).reduce((s,arr) => s+arr.length, 0);
-  const historyPrompts = state.history.map(id => state.prompts.find(p => p.id === id)).filter(Boolean).slice(0, 4);
-
-  return `
-    <div class="hero">
-      <h1>${escapeHtml(state.settings.siteDesc || '发现最优质的 AI 生图提示词')}</h1>
-      <p>汇聚 ${state.models.map(m=>m.short).join('、')} 等主流模型的精选 Prompt，一键复制，即刻出图。</p>
-      <div class="hero-stats">
-        <div class="stat-item"><span class="stat-num">${state.prompts.length}</span><span class="stat-label">提示词</span></div>
-        <div class="stat-item"><span class="stat-num">${state.users.length-1}</span><span class="stat-label">创作者</span></div>
-        <div class="stat-item"><span class="stat-num">${totalLikes}</span><span class="stat-label">总点赞</span></div>
-        <div class="stat-item"><span class="stat-num">${state.models.length}</span><span class="stat-label">模型支持</span></div>
-        <div class="stat-item"><span class="stat-num">${totalComments}</span><span class="stat-label">评论数</span></div>
-      </div>
+  return `<div class="hero">
+    <div class="hero-badge">📡 数据存储于 GitHub</div>
+    <h1>发现最优质的 AI 生图提示词</h1>
+    <p>汇聚 ${MODELS.map(m=>m.short).join('、')} 等主流模型的精选 Prompt，一键复制，即刻出图。所有数据存储于 GitHub 仓库，多设备同步。</p>
+    <div class="hero-stats">
+      <div class="stat-item"><span class="stat-num">${state.prompts.length}</span><span class="stat-label">提示词</span></div>
+      <div class="stat-item"><span class="stat-num">${CATEGORIES.length-1}</span><span class="stat-label">分类</span></div>
+      <div class="stat-item"><span class="stat-num">${totalLikes}</span><span class="stat-label">总点赞</span></div>
+      <div class="stat-item"><span class="stat-num">${MODELS.length}</span><span class="stat-label">模型支持</span></div>
     </div>
-
-    <div class="section-header"><div class="section-title">热门分类</div></div>
-    <div class="category-bar">
-      ${state.categories.map(c => `
-        <div class="cat-tag" onclick="navigate('discover',{filters:{category:'${c.id}'}})">${c.icon} ${c.name}</div>
-      `).join('')}
-    </div>
-
-    ${historyPrompts.length > 0 ? `
-    <div class="section-header">
-      <div class="section-title">最近浏览</div>
-      <div class="section-more" onclick="clearHistory()">清空历史</div>
-    </div>
-    <div style="margin-bottom:24px;">
-      ${historyPrompts.map(p => `<span class="history-chip" onclick="navigate('detail',{promptId:'${p.id}'})">${escapeHtml(p.title.substring(0,20))}${p.title.length>20?'...':''}</span>`).join('')}
-    </div>
-    ` : ''}
-
-    <div class="two-col">
-      <div>
-        <div class="section-header">
-          <div class="section-title">热门提示词</div>
-          <div class="section-more" onclick="navigate('discover')">查看更多 →</div>
-        </div>
-        <div class="card-grid">${hotPrompts.map(p => renderPromptCard(p)).join('')}</div>
-
-        <div class="section-header">
-          <div class="section-title">最新发布</div>
-          <div class="section-more" onclick="navigate('discover',{filters:{sort:'new'}})">查看更多 →</div>
-        </div>
-        <div class="card-grid">${newPrompts.map(p => renderPromptCard(p)).join('')}</div>
-      </div>
-
-      <div class="sidebar">
-        <div class="sidebar-card">
-          <div class="sidebar-title">模型分类</div>
-          <div class="model-list">
-            ${state.models.map(m => `
-              <div class="model-item" onclick="navigate('discover',{filters:{model:'${m.id}'}})">
-                <div class="model-name">
-                  <span class="card-model" style="font-size:9px;padding:2px 5px;background:${m.color}22;color:${m.color};">${m.short}</span>
-                  <span class="model-name-text">${m.name}</span>
-                  ${m.hot ? '<span class="hot-badge">HOT</span>' : ''}
-                </div>
-                <span class="model-count">${state.prompts.filter(p=>p.model===m.id).length}</span>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-
-        <div class="sidebar-card">
-          <div class="sidebar-title">活跃创作者</div>
-          <div class="user-list">
-            ${topUsers.map((u,i) => `
-              <div class="user-row" onclick="navigate('profile')">
-                <span class="user-rank ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</span>
-                <div class="author-avatar" style="background:${u.color}">${u.avatar}</div>
-                <div class="user-info">
-                  <div class="user-name-sm">${u.name}</div>
-                  <div class="user-bio">${u.bio}</div>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
+  </div>
+  <div class="section-header"><div class="section-title">热门分类</div></div>
+  <div class="category-bar">
+    ${CATEGORIES.filter(c=>c.id!=='all').map(c => `<div class="cat-tag" onclick="navigate('discover',{filters:{category:'${c.id}'}})">${c.icon} ${c.name}</div>`).join('')}
+  </div>
+  <div class="two-col"><div>
+    <div class="section-header"><div class="section-title">热门提示词</div><div class="section-more" onclick="navigate('discover')">查看更多 →</div></div>
+    ${hotPrompts.length === 0 ? emptyStateHTML('📝','还没有提示词','管理员登录后可发布第一条提示词') : `<div class="card-grid">${hotPrompts.map(p => renderPromptCard(p)).join('')}</div>`}
+    <div class="section-header"><div class="section-title">最新发布</div><div class="section-more" onclick="navigate('discover',{filters:{sort:'new'}})">查看更多 →</div></div>
+    ${newPrompts.length === 0 ? '' : `<div class="card-grid">${newPrompts.map(p => renderPromptCard(p)).join('')}</div>`}
+  </div><div class="sidebar">
+    <div class="sidebar-card"><div class="sidebar-title">模型分类</div><div class="model-list">
+      ${MODELS.map(m => `<div class="model-item" onclick="navigate('discover',{filters:{model:'${m.id}'}})">
+        <div class="model-name"><span class="card-model" style="font-size:9px;padding:2px 5px;background:${m.color}22;color:${m.color};">${m.short}</span><span class="model-name-text">${m.name}</span>${m.hot ? '<span class="hot-badge">HOT</span>' : ''}</div>
+        <span class="model-count">${state.prompts.filter(p=>p.model===m.id).length}</span>
+      </div>`).join('')}
+    </div></div>
+    <div class="sidebar-card"><div class="sidebar-title">热门标签</div><div style="display:flex;flex-wrap:wrap;gap:6px;">
+      ${[...new Set(state.prompts.flatMap(p => p.tags || []))].slice(0, 20).map(tag => `<span class="card-tag" style="cursor:pointer;" onclick="navigate('discover',{filters:{tag:'${escapeHtml(tag)}'}})">${escapeHtml(tag)}</span>`).join('')}
+    </div></div>
+  </div></div>`;
 }
 
 function renderPromptCard(p) {
-  const author = getUser(p.author);
   const model = getModel(p.model);
   const cat = getCategory(p.category);
   const liked = state.likedIds.has(p.id);
   const saved = state.savedIds.has(p.id);
   const tags = (p.tags || []).slice(0, 3);
-
-  return `
-    <div class="prompt-card" onclick="navigate('detail',{promptId:'${p.id}'})">
-      <div class="card-header">
-        <span class="card-model" style="background:${model.color}22;color:${model.color};">${model.short}</span>
-        <span class="card-cat">${cat.icon} ${cat.name}</span>
-      </div>
-      <div class="card-title">${escapeHtml(p.title)}</div>
-      ${tags.length ? `<div class="card-tags">${tags.map(t=>`<span class="card-tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
-      <div class="card-prompt">${escapeHtml(p.prompt)}</div>
-      <div class="card-footer">
-        <div class="card-author">
-          <div class="author-avatar" style="background:${author.color}">${author.avatar}</div>
-          <span class="author-name">${author.name}</span>
-        </div>
-        <div class="card-stats">
-          <button class="stat-btn ${liked?'liked':''}" onclick="event.stopPropagation();toggleLike('${p.id}')">&#10084; ${p.likes}</button>
-          <button class="stat-btn ${saved?'saved':''}" onclick="event.stopPropagation();toggleSave('${p.id}')">&#9733; ${p.saves}</button>
-          <span class="stat-btn">&#128172; ${(state.comments[p.id]||[]).length}</span>
-        </div>
+  return `<div class="prompt-card" onclick="navigate('detail',{promptId:'${p.id}'})">
+    <div class="card-header"><span class="card-model" style="background:${model.color}22;color:${model.color};">${model.short}</span><span class="card-cat">${cat.icon} ${cat.name}</span></div>
+    <div class="card-title">${escapeHtml(p.title)}</div>
+    ${tags.length ? `<div class="card-tags">${tags.map(t=>`<span class="card-tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
+    <div class="card-prompt">${escapeHtml(p.prompt)}</div>
+    <div class="card-footer">
+      <div class="card-author"><span class="author-name" style="font-size:11px;">${escapeHtml(p.author || '匿名')}</span></div>
+      <div class="card-stats">
+        <button class="stat-btn ${liked?'liked':''}" onclick="event.stopPropagation();toggleLike('${p.id}')">&#10084; ${p.likes||0}</button>
+        <button class="stat-btn ${saved?'saved':''}" onclick="event.stopPropagation();toggleSave('${p.id}')">&#9733; ${p.saves||0}</button>
       </div>
     </div>
-  `;
+  </div>`;
 }
 
 // ==================== 发现页 ====================
@@ -1114,1167 +669,389 @@ function renderDiscover() {
   if (f.tag) filtered = filtered.filter(p => (p.tags||[]).includes(f.tag));
   if (f.search) {
     const q = f.search.toLowerCase();
-    filtered = filtered.filter(p =>
-      p.title.toLowerCase().includes(q) ||
-      p.prompt.toLowerCase().includes(q) ||
-      (p.tags||[]).some(t => t.toLowerCase().includes(q)) ||
-      getCategory(p.category).name.includes(f.search) ||
-      getUser(p.author).name.toLowerCase().includes(q)
-    );
+    filtered = filtered.filter(p => p.title.toLowerCase().includes(q) || p.prompt.toLowerCase().includes(q) || (p.tags||[]).some(t => t.toLowerCase().includes(q)));
   }
-  if (f.sort === 'hot') filtered.sort((a,b) => b.likes - a.likes);
+  if (f.sort === 'hot') filtered.sort((a,b) => (b.likes||0) - (a.likes||0));
   else if (f.sort === 'new') filtered.sort((a,b) => b.date.localeCompare(a.date));
-  else if (f.sort === 'saved') filtered.sort((a,b) => b.saves - a.saves);
-  else if (f.sort === 'comments') filtered.sort((a,b) => (state.comments[b.id]||[]).length - (state.comments[a.id]||[]).length);
+  else if (f.sort === 'saved') filtered.sort((a,b) => (b.saves||0) - (a.saves||0));
 
-  const perPage = state.settings.itemsPerPage || 12;
+  const perPage = 12;
   const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
   if (state.currentPage_num > totalPages) state.currentPage_num = totalPages;
   const start = (state.currentPage_num - 1) * perPage;
   const pageItems = filtered.slice(start, start + perPage);
-
   const activeModel = f.model !== 'all' ? getModel(f.model) : null;
   const activeCat = f.category !== 'all' ? getCategory(f.category) : null;
 
-  return `
-    <div class="section-header">
-      <div class="section-title">发现提示词</div>
-      <span class="result-count">共 ${filtered.length} 条结果</span>
-    </div>
-
-    <div class="category-bar">
-      <div class="cat-tag ${f.category==='all'?'active':''}" onclick="setFilter('category','all')">全部</div>
-      ${state.categories.map(c => `
-        <div class="cat-tag ${f.category===c.id?'active':''}" onclick="setFilter('category','${c.id}')">${c.icon} ${c.name}</div>
-      `).join('')}
-    </div>
-
-    <div class="two-col">
-      <div>
-        <div class="filter-bar">
-          <div class="filter-left">
-            ${activeModel ? `<span class="cat-tag active" onclick="setFilter('model','all')">${activeModel.name} ✕</span>` : ''}
-            ${activeCat ? `<span class="cat-tag active" onclick="setFilter('category','all')">${activeCat.name} ✕</span>` : ''}
-            ${f.tag ? `<span class="cat-tag active" onclick="setFilter('tag','')">标签: ${f.tag} ✕</span>` : ''}
-            ${f.search ? `<span class="cat-tag active" onclick="clearSearch()">搜索: "${f.search}" ✕</span>` : ''}
-          </div>
-          <div class="filter-left">
-            <select class="sort-select" onchange="setFilter('sort',this.value)">
-              <option value="hot" ${f.sort==='hot'?'selected':''}>最热</option>
-              <option value="new" ${f.sort==='new'?'selected':''}>最新</option>
-              <option value="saved" ${f.sort==='saved'?'selected':''}>收藏最多</option>
-              <option value="comments" ${f.sort==='comments'?'selected':''}>评论最多</option>
-            </select>
-            <div class="view-toggle">
-              <button class="view-btn ${state.viewMode==='grid'?'active':''}" onclick="setView('grid')">网格</button>
-              <button class="view-btn ${state.viewMode==='list'?'active':''}" onclick="setView('list')">列表</button>
-            </div>
-          </div>
-        </div>
-
-        ${pageItems.length === 0 ? `
-          <div class="empty-state">
-            <div class="empty-icon">&#128269;</div>
-            <div class="empty-text">没有找到匹配的提示词</div>
-            <div class="empty-hint">试试更换筛选条件或搜索关键词</div>
-          </div>
-        ` : state.viewMode === 'grid' ? `
-          <div class="card-grid">${pageItems.map(p => renderPromptCard(p)).join('')}</div>
-        ` : `
-          <div class="list-view">${pageItems.map(p => renderListItem(p)).join('')}</div>
-        `}
-
-        ${totalPages > 1 ? `
-          <div class="pagination">
-            <button class="page-btn" onclick="goPage(${state.currentPage_num-1})" ${state.currentPage_num<=1?'disabled':''}>‹</button>
-            ${Array.from({length:totalPages},(_,i)=>i+1).slice(Math.max(0,state.currentPage_num-3),Math.max(0,state.currentPage_num-3)+5).map(p => `
-              <button class="page-btn ${p===state.currentPage_num?'active':''}" onclick="goPage(${p})">${p}</button>
-            `).join('')}
-            <button class="page-btn" onclick="goPage(${state.currentPage_num+1})" ${state.currentPage_num>=totalPages?'disabled':''}>›</button>
-          </div>
-        ` : ''}
+  return `<div class="section-header"><div class="section-title">发现提示词</div><span class="result-count">共 ${filtered.length} 条结果</span></div>
+  <div class="category-bar">
+    ${CATEGORIES.map(c => `<div class="cat-tag ${f.category===c.id?'active':''}" onclick="setFilter('category','${c.id}')">${c.icon} ${c.name}</div>`).join('')}
+  </div>
+  <div class="two-col"><div>
+    <div class="filter-bar">
+      <div class="filter-left">
+        ${activeModel ? `<span class="cat-tag active" onclick="setFilter('model','all')">${activeModel.name} ✕</span>` : ''}
+        ${activeCat ? `<span class="cat-tag active" onclick="setFilter('category','all')">${activeCat.name} ✕</span>` : ''}
+        ${f.tag ? `<span class="cat-tag active" onclick="setFilter('tag','')">标签: ${f.tag} ✕</span>` : ''}
+        ${f.search ? `<span class="cat-tag active" onclick="clearSearch()">搜索: "${f.search}" ✕</span>` : ''}
       </div>
-
-      <div class="sidebar">
-        <div class="sidebar-card">
-          <div class="sidebar-title">按模型筛选</div>
-          <div class="model-list">
-            <div class="model-item ${f.model==='all'?'active':''}" onclick="setFilter('model','all')">
-              <div class="model-name">全部模型</div>
-              <span class="model-count">${state.prompts.length}</span>
-            </div>
-            ${state.models.map(m => `
-              <div class="model-item ${f.model===m.id?'active':''}" onclick="setFilter('model','${m.id}')">
-                <div class="model-name">
-                  <span class="card-model" style="font-size:9px;padding:2px 5px;background:${m.color}22;color:${m.color};">${m.short}</span>
-                  <span class="model-name-text">${m.name}</span>
-                  ${m.hot ? '<span class="hot-badge">HOT</span>' : ''}
-                </div>
-                <span class="model-count">${state.prompts.filter(p=>p.model===m.id).length}</span>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-
-        <div class="sidebar-card">
-          <div class="sidebar-title">热门标签</div>
-          <div style="display:flex;flex-wrap:wrap;gap:6px;">
-            ${[...new Set(state.prompts.flatMap(p => p.tags || []))].slice(0, 20).map(tag => `
-              <span class="card-tag" style="cursor:pointer;" onclick="setFilter('tag','${escapeHtml(tag)}')">${escapeHtml(tag)}</span>
-            `).join('')}
-          </div>
+      <div class="filter-left">
+        <select class="sort-select" onchange="setFilter('sort',this.value)">
+          <option value="hot" ${f.sort==='hot'?'selected':''}>最热</option>
+          <option value="new" ${f.sort==='new'?'selected':''}>最新</option>
+          <option value="saved" ${f.sort==='saved'?'selected':''}>收藏最多</option>
+        </select>
+        <div class="view-toggle">
+          <button class="view-btn ${state.viewMode==='grid'?'active':''}" onclick="setView('grid')">网格</button>
+          <button class="view-btn ${state.viewMode==='list'?'active':''}" onclick="setView('list')">列表</button>
         </div>
       </div>
     </div>
-  `;
+    ${pageItems.length === 0 ? `<div class="empty-state"><div class="empty-icon">&#128269;</div><div class="empty-text">没有找到匹配的提示词</div><div class="empty-hint">试试更换筛选条件或搜索关键词</div></div>` :
+      state.viewMode === 'grid' ? `<div class="card-grid">${pageItems.map(p => renderPromptCard(p)).join('')}</div>` :
+      `<div class="list-view">${pageItems.map(p => renderListItem(p)).join('')}</div>`}
+    ${totalPages > 1 ? `<div class="pagination">
+      <button class="page-btn" onclick="goPage(${state.currentPage_num-1})" ${state.currentPage_num<=1?'disabled':''}>‹</button>
+      ${Array.from({length:totalPages},(_,i)=>i+1).slice(Math.max(0,state.currentPage_num-3),Math.max(0,state.currentPage_num-3)+5).map(p => `<button class="page-btn ${p===state.currentPage_num?'active':''}" onclick="goPage(${p})">${p}</button>`).join('')}
+      <button class="page-btn" onclick="goPage(${state.currentPage_num+1})" ${state.currentPage_num>=totalPages?'disabled':''}>›</button>
+    </div>` : ''}
+  </div><div class="sidebar">
+    <div class="sidebar-card"><div class="sidebar-title">按模型筛选</div><div class="model-list">
+      <div class="model-item ${f.model==='all'?'active':''}" onclick="setFilter('model','all')"><div class="model-name">全部模型</div><span class="model-count">${state.prompts.length}</span></div>
+      ${MODELS.map(m => `<div class="model-item ${f.model===m.id?'active':''}" onclick="setFilter('model','${m.id}')">
+        <div class="model-name"><span class="card-model" style="font-size:9px;padding:2px 5px;background:${m.color}22;color:${m.color};">${m.short}</span><span class="model-name-text">${m.name}</span>${m.hot ? '<span class="hot-badge">HOT</span>' : ''}</div>
+        <span class="model-count">${state.prompts.filter(p=>p.model===m.id).length}</span>
+      </div>`).join('')}
+    </div></div>
+  </div></div>`;
 }
 
 function renderListItem(p) {
-  const author = getUser(p.author);
   const model = getModel(p.model);
   const cat = getCategory(p.category);
-  return `
-    <div class="list-item" onclick="navigate('detail',{promptId:'${p.id}'})">
-      <div class="list-main">
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap;">
-          <span class="card-model" style="font-size:9px;background:${model.color}22;color:${model.color};">${model.short}</span>
-          <span class="card-cat">${cat.icon} ${cat.name}</span>
-          ${(p.tags||[]).slice(0,2).map(t=>`<span class="card-tag">${escapeHtml(t)}</span>`).join('')}
-        </div>
-        <div class="list-title">${escapeHtml(p.title)}</div>
-        <div class="list-prompt">${escapeHtml(p.prompt)}</div>
+  return `<div class="list-item" onclick="navigate('detail',{promptId:'${p.id}'})">
+    <div class="list-main">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap;">
+        <span class="card-model" style="font-size:9px;background:${model.color}22;color:${model.color};">${model.short}</span>
+        <span class="card-cat">${cat.icon} ${cat.name}</span>
+        ${(p.tags||[]).slice(0,2).map(t=>`<span class="card-tag">${escapeHtml(t)}</span>`).join('')}
       </div>
-      <div class="list-side">
-        <div class="card-author">
-          <div class="author-avatar" style="background:${author.color};width:22px;height:22px;font-size:10px;">${author.avatar}</div>
-          <span class="author-name" style="font-size:11px;">${author.name}</span>
-        </div>
-        <div class="card-stats" style="flex-direction:column;gap:3px;align-items:flex-end;">
-          <span>&#10084; ${p.likes}</span>
-          <span>&#9733; ${p.saves}</span>
-          <span>&#128172; ${(state.comments[p.id]||[]).length}</span>
-        </div>
-      </div>
+      <div class="list-title">${escapeHtml(p.title)}</div>
+      <div class="list-prompt">${escapeHtml(p.prompt)}</div>
     </div>
-  `;
+    <div class="list-side">
+      <div class="card-stats" style="flex-direction:column;gap:3px;align-items:flex-end;"><span>&#10084; ${p.likes||0}</span><span>&#9733; ${p.saves||0}</span></div>
+    </div>
+  </div>`;
 }
 
 function setFilter(key, val) { state.filters[key] = val; state.currentPage_num = 1; render(); }
 function setView(mode) { state.viewMode = mode; render(); }
 function goPage(n) { state.currentPage_num = n; window.scrollTo({top:0,behavior:'smooth'}); render(); }
 function clearSearch() { state.filters.search = ''; document.getElementById('globalSearch').value = ''; state.currentPage_num = 1; render(); }
-function clearHistory() { state.history = []; saveState(); showToast('浏览历史已清空', 'success'); render(); }
+function emptyStateHTML(icon, text, hint) { return `<div class="empty-state"><div class="empty-icon">${icon}</div><div class="empty-text">${text}</div><div class="empty-hint">${hint}</div></div>`; }
 
 // ==================== 详情页 ====================
 function renderDetail() {
   const p = state.prompts.find(x => x.id === state.currentPromptId);
   if (!p) return '<div class="empty-state"><div class="empty-icon">&#128533;</div><div class="empty-text">提示词不存在</div></div>';
-
-  const author = getUser(p.author);
   const model = getModel(p.model);
   const cat = getCategory(p.category);
   const liked = state.likedIds.has(p.id);
   const saved = state.savedIds.has(p.id);
-  const comments = state.comments[p.id] || [];
-
-  // 相关推荐：同分类或同模型
-  const related = state.prompts
-    .filter(x => x.id !== p.id && (x.category === p.category || x.model === p.model))
-    .sort((a,b) => b.likes - a.likes)
-    .slice(0, 3);
-
-  return `
-    <button class="btn-cancel" style="margin-bottom:14px;" onclick="navigate('discover')">← 返回列表</button>
-
-    <div class="detail-header">
-      <div class="detail-meta">
-        <span class="card-model" style="font-size:11px;padding:4px 10px;background:${model.color}22;color:${model.color};">${model.name}</span>
-        <span class="cat-tag" style="padding:4px 10px;font-size:11px;">${cat.icon} ${cat.name}</span>
-        <span style="font-size:11px;color:var(--text-muted);">${p.date}</span>
-      </div>
-      <h1 class="detail-title">${escapeHtml(p.title)}</h1>
-      ${(p.tags||[]).length ? `
-        <div class="detail-tags">
-          ${p.tags.map(t => `<span class="detail-tag" onclick="navigate('discover',{filters:{tag:'${escapeHtml(t)}'}})">#${escapeHtml(t)}</span>`).join('')}
-        </div>
-      ` : ''}
-      <div class="detail-author-bar">
-        <div class="detail-author">
-          <div class="author-avatar" style="background:${author.color}">${author.avatar}</div>
-          <div>
-            <div class="author-name">${author.name}</div>
-            <div class="detail-date">${author.bio}</div>
-          </div>
-        </div>
-        <div class="action-bar">
-          <button class="action-btn btn-copy" onclick="copyToClipboard(${JSON.stringify(p.prompt)})">&#128203; 复制 Prompt</button>
-          <button class="action-btn ${liked?'liked':''}" onclick="toggleLike('${p.id}')">&#10084; ${p.likes}</button>
-          <button class="action-btn ${saved?'saved':''}" onclick="toggleSave('${p.id}')">&#9733; ${p.saves}</button>
-          <button class="action-btn" onclick="copyToClipboard(${JSON.stringify(location.href.split('#')[0] + '#detail/' + p.id)})">&#128279; 分享</button>
-          ${p.author === 'me' ? `<button class="action-btn" onclick="navigate('publish',{editId:'${p.id}'})">&#9998; 编辑</button>` : ''}
-        </div>
-      </div>
+  const related = state.prompts.filter(x => x.id !== p.id && (x.category === p.category || x.model === p.model)).sort((a,b) => (b.likes||0) - (a.likes||0)).slice(0, 3);
+  return `<button class="btn-cancel" style="margin-bottom:14px;" onclick="navigate('discover')">← 返回列表</button>
+    <div class="detail-header"><div class="detail-meta">
+      <span class="card-model" style="font-size:11px;padding:4px 10px;background:${model.color}22;color:${model.color};">${model.name}</span>
+      <span class="cat-tag" style="padding:4px 10px;font-size:11px;">${cat.icon} ${cat.name}</span>
+      <span style="font-size:11px;color:var(--text-muted);">${p.date}</span>
     </div>
-
-    <div class="prompt-block">
-      <div class="prompt-block-header">
-        <div class="prompt-block-title">&#9998; 正向提示词 (Positive Prompt)</div>
-        <button class="action-btn btn-copy" style="padding:4px 10px;font-size:11px;" onclick="copyToClipboard(${JSON.stringify(p.prompt)})">复制</button>
+    <h1 class="detail-title">${escapeHtml(p.title)}</h1>
+    ${(p.tags||[]).length ? `<div class="detail-tags">${p.tags.map(t => `<span class="detail-tag" onclick="navigate('discover',{filters:{tag:'${escapeHtml(t)}'}})">#${escapeHtml(t)}</span>`).join('')}</div>` : ''}
+    <div class="detail-author-bar">
+      <div class="detail-author"><div style="font-size:13px;font-weight:600;">${escapeHtml(p.author || '匿名')}</div></div>
+      <div class="action-bar">
+        <button class="action-btn btn-copy" onclick="copyToClipboard(${JSON.stringify(p.prompt)})">&#128203; 复制 Prompt</button>
+        <button class="action-btn ${liked?'liked':''}" onclick="toggleLike('${p.id}')">&#10084; ${p.likes||0}</button>
+        <button class="action-btn ${saved?'saved':''}" onclick="toggleSave('${p.id}')">&#9733; ${p.saves||0}</button>
+        ${state.isAdmin ? `<button class="action-btn" onclick="navigate('publish',{editId:'${p.id}'})">&#9998; 编辑</button><button class="action-btn danger" onclick="confirmDeletePrompt('${p.id}')">&#128465; 删除</button>` : ''}
       </div>
-      <div class="prompt-text">${escapeHtml(p.prompt)}</div>
-    </div>
-
-    ${p.negative ? `
-    <div class="prompt-block">
-      <div class="prompt-block-header">
-        <div class="prompt-block-title negative">&#9888; 负向提示词 (Negative Prompt)</div>
-        <button class="action-btn" style="padding:4px 10px;font-size:11px;" onclick="copyToClipboard(${JSON.stringify(p.negative)})">复制</button>
-      </div>
-      <div class="prompt-text negative">${escapeHtml(p.negative)}</div>
-    </div>
-    ` : ''}
-
-    <div class="params-section">
-      <div class="params-header" onclick="toggleParams(this)">
-        <span>&#9881; 生成参数</span>
-        <span class="params-arrow">&#9662;</span>
-      </div>
-      <div class="params-body">
-        <div class="params-grid">
-          <div class="param-item"><div class="param-label">采样器 Sampler</div><div class="param-value">${p.params.sampler}</div></div>
-          <div class="param-item"><div class="param-label">步数 Steps</div><div class="param-value">${p.params.steps}</div></div>
-          <div class="param-item"><div class="param-label">CFG Scale</div><div class="param-value">${p.params.cfg}</div></div>
-          <div class="param-item"><div class="param-label">尺寸 Size</div><div class="param-value">${p.params.size}</div></div>
-          <div class="param-item"><div class="param-label">种子 Seed</div><div class="param-value">${p.params.seed}</div></div>
-        </div>
-      </div>
-    </div>
-
-    ${related.length ? `
-    <div class="related-section">
-      <div class="section-header"><div class="section-title">相关推荐</div></div>
-      <div class="related-grid">${related.map(r => renderPromptCard(r)).join('')}</div>
-    </div>
-    ` : ''}
-
-    <div class="comments-section" style="margin-top:20px;">
-      <div class="sidebar-title" style="margin-bottom:14px;">评论 (${comments.length})</div>
-      <div class="comment-input-area">
-        <div class="author-avatar" style="background:linear-gradient(135deg,#ec4899,#8b5cf6);flex-shrink:0;">我</div>
-        <div style="flex:1;display:flex;flex-direction:column;gap:8px;">
-          <textarea class="comment-input" id="commentInput" placeholder="写下你的评论..."></textarea>
-          <button class="btn-comment" style="align-self:flex-end;" onclick="submitComment('${p.id}')">发表评论</button>
-        </div>
-      </div>
-      <div class="comment-list">
-        ${comments.length === 0 ? '<div style="text-align:center;color:var(--text-muted);padding:16px;">暂无评论，来抢沙发吧</div>' : comments.map((c, idx) => {
-          const cu = getUser(c.author);
-          return `
-            <div class="comment-item">
-              <div class="author-avatar" style="background:${cu.color};flex-shrink:0;">${cu.avatar}</div>
-              <div class="comment-body">
-                <div class="comment-head">
-                  <span class="comment-author">${cu.name}</span>
-                  <span class="comment-time">${c.time}</span>
-                </div>
-                <div class="comment-text">${escapeHtml(c.text)}</div>
-                ${c.author === 'me' ? `<div class="comment-actions"><button class="comment-action-btn danger" onclick="deleteComment('${p.id}',${idx})">删除</button></div>` : ''}
-              </div>
-            </div>
-          `;
-        }).join('')}
-      </div>
-    </div>
-  `;
+    </div></div>
+    <div class="prompt-block"><div class="prompt-block-header"><div class="prompt-block-title">&#9998; 正向提示词 (Positive Prompt)</div><button class="action-btn btn-copy" style="padding:4px 10px;font-size:11px;" onclick="copyToClipboard(${JSON.stringify(p.prompt)})">复制</button></div><div class="prompt-text">${escapeHtml(p.prompt)}</div></div>
+    ${p.negative ? `<div class="prompt-block"><div class="prompt-block-header"><div class="prompt-block-title negative">&#9888; 负向提示词 (Negative Prompt)</div><button class="action-btn" style="padding:4px 10px;font-size:11px;" onclick="copyToClipboard(${JSON.stringify(p.negative)})">复制</button></div><div class="prompt-text negative">${escapeHtml(p.negative)}</div></div>` : ''}
+    ${p.params ? `<div class="params-section"><div class="params-header" onclick="toggleParams(this)"><span>&#9881; 生成参数</span><span class="params-arrow">&#9662;</span></div><div class="params-body"><div class="params-grid">
+      <div class="param-item"><div class="param-label">采样器 Sampler</div><div class="param-value">${p.params.sampler||'N/A'}</div></div>
+      <div class="param-item"><div class="param-label">步数 Steps</div><div class="param-value">${p.params.steps||'N/A'}</div></div>
+      <div class="param-item"><div class="param-label">CFG Scale</div><div class="param-value">${p.params.cfg||'N/A'}</div></div>
+      <div class="param-item"><div class="param-label">尺寸 Size</div><div class="param-value">${p.params.size||'N/A'}</div></div>
+      <div class="param-item"><div class="param-label">种子 Seed</div><div class="param-value">${p.params.seed||'随机'}</div></div>
+    </div></div></div>` : ''}
+    ${related.length ? `<div class="related-section"><div class="section-header"><div class="section-title">相关推荐</div></div><div class="related-grid">${related.map(r => renderPromptCard(r)).join('')}</div></div>` : ''}`;
 }
 
-function toggleParams(el) {
-  const body = el.nextElementSibling;
-  const arrow = el.querySelector('.params-arrow');
-  body.classList.toggle('open');
-  arrow.textContent = body.classList.contains('open') ? '▲' : '▼';
-}
-
-function submitComment(promptId) {
-  const input = document.getElementById('commentInput');
-  const text = input.value.trim();
-  if (!text) { showToast('请输入评论内容', 'error'); return; }
-  if (!state.comments[promptId]) state.comments[promptId] = [];
-  state.comments[promptId].unshift({ id: genId('c'), author: 'me', text: text, time: '刚刚' });
-  saveState(); render(); showToast('评论发表成功', 'success');
-}
-
-function deleteComment(promptId, idx) {
-  if (!confirm('确定删除这条评论吗？')) return;
-  state.comments[promptId].splice(idx, 1);
-  saveState(); render(); showToast('评论已删除', 'success');
-}
+function toggleParams(el) { const body = el.nextElementSibling; const arrow = el.querySelector('.params-arrow'); body.classList.toggle('open'); arrow.textContent = body.classList.contains('open') ? '▲' : '▼'; }
 
 // ==================== 发布/编辑页 ====================
-let formTags = [];
-
 function renderPublish() {
   const isEdit = !!state.editingPromptId;
   const editing = isEdit ? state.prompts.find(p => p.id === state.editingPromptId) : null;
-
-  if (isEdit && !editing) {
-    return '<div class="empty-state"><div class="empty-icon">&#128533;</div><div class="empty-text">要编辑的提示词不存在</div></div>';
-  }
-
-  formTags = editing ? [...(editing.tags || [])] : [];
-
-  return `
-    <div class="form-container">
-      <div class="section-header" style="margin-bottom:16px;">
-        <div class="section-title">${isEdit ? '编辑提示词' : '发布新提示词'}</div>
-      </div>
-
-      <div class="form-card">
-        <div class="form-group-title"><span class="num">1</span>基本信息</div>
-        <div class="form-field">
-          <label class="form-label">标题<span class="req">*</span></label>
-          <input class="form-input" id="f_title" value="${editing ? escapeHtml(editing.title) : ''}" placeholder="给你的提示词起个好记的名字">
-        </div>
-        <div class="form-row">
-          <div class="form-field" style="margin-bottom:0;">
-            <label class="form-label">分类<span class="req">*</span></label>
-            <select class="form-select" id="f_category">
-              ${state.categories.map(c => `<option value="${c.id}" ${editing && editing.category===c.id?'selected':''}>${c.icon} ${c.name}</option>`).join('')}
-            </select>
-          </div>
-          <div class="form-field" style="margin-bottom:0;">
-            <label class="form-label">模型<span class="req">*</span></label>
-            <select class="form-select" id="f_model">
-              ${state.models.map(m => `<option value="${m.id}" ${editing && editing.model===m.id?'selected':''}>${m.name}${m.hot?' 🔥':''}</option>`).join('')}
-            </select>
-          </div>
-        </div>
-        <div class="form-field" style="margin-bottom:0;">
-          <label class="form-label">标签（回车添加，最多10个）</label>
-          <div class="tag-input-area" id="tagArea">
-            ${formTags.map((t,i) => `<span class="tag-chip">${escapeHtml(t)}<span class="tag-chip-remove" onclick="removeTag(${i})">×</span></span>`).join('')}
-            <input class="tag-input-field" id="tagInput" placeholder="输入标签后按回车..." onkeydown="handleTagInput(event)">
-          </div>
-        </div>
-      </div>
-
-      <div class="form-card">
-        <div class="form-group-title"><span class="num">2</span>Prompt 内容</div>
-        <div class="form-field">
-          <label class="form-label">正向提示词 (Positive Prompt)<span class="req">*</span></label>
-          <textarea class="form-textarea" id="f_prompt" placeholder="masterpiece, best quality, 1girl, solo, ...">${editing ? escapeHtml(editing.prompt) : ''}</textarea>
-          <div class="form-hint">建议以英文逗号分隔关键词，质量词放在最前</div>
-        </div>
-        <div class="form-field" style="margin-bottom:0;">
-          <label class="form-label">负向提示词 (Negative Prompt)</label>
-          <textarea class="form-textarea" id="f_negative" style="min-height:80px;" placeholder="worst quality, low quality, bad anatomy, ...">${editing ? escapeHtml(editing.negative || '') : ''}</textarea>
-        </div>
-      </div>
-
-      <div class="form-card">
-        <div class="form-group-title"><span class="num">3</span>生成参数</div>
-        <div class="form-row">
-          <div class="form-field" style="margin-bottom:0;">
-            <label class="form-label">采样器 Sampler</label>
-            <select class="form-select" id="f_sampler">
-              ${['Euler a','DPM++ 2M Karras','DPM++ SDE Karras','DPM++ 2M SDE Karras','DDIM','N/A'].map(s => `<option ${editing && editing.params.sampler===s?'selected':''}>${s}</option>`).join('')}
-            </select>
-          </div>
-          <div class="form-field" style="margin-bottom:0;">
-            <label class="form-label">步数 Steps</label>
-            <input class="form-input" id="f_steps" value="${editing ? editing.params.steps : '28'}">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-field" style="margin-bottom:0;">
-            <label class="form-label">CFG Scale</label>
-            <input class="form-input" id="f_cfg" value="${editing ? editing.params.cfg : '7'}">
-          </div>
-          <div class="form-field" style="margin-bottom:0;">
-            <label class="form-label">尺寸 Size</label>
-            <select class="form-select" id="f_size">
-              ${['832x1216','1024x1024','768x1024','1024x768','1216x832','512x512'].map(s => `<option ${editing && editing.params.size===s?'selected':''}>${s}</option>`).join('')}
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-actions">
-        <button class="btn-cancel" onclick="navigate('${isEdit ? 'detail' : 'home'}')">取消</button>
-        ${isEdit ? `<button class="btn-danger" onclick="deletePrompt('${editing.id}')">删除</button>` : ''}
-        <button class="btn-submit" onclick="submitPrompt()">${isEdit ? '保存修改' : '发布提示词'}</button>
-      </div>
+  if (isEdit && !editing) return '<div class="empty-state"><div class="empty-icon">&#128533;</div><div class="empty-text">要编辑的提示词不存在</div></div>';
+  state.formTags = editing ? [...(editing.tags || [])] : [];
+  return `<div class="form-container">
+    <div class="section-header" style="margin-bottom:16px;"><div class="section-title">${isEdit ? '编辑提示词' : '发布新提示词'}</div></div>
+    <div class="form-card"><div class="form-group-title"><span class="num">1</span>基本信息</div>
+      <div class="form-field"><label class="form-label">标题<span class="req">*</span></label><input class="form-input" id="f_title" value="${editing ? escapeHtml(editing.title) : ''}" placeholder="给你的提示词起个好记的名字"></div>
+      <div class="form-row"><div class="form-field" style="margin-bottom:0;"><label class="form-label">分类<span class="req">*</span></label><select class="form-select" id="f_category">${CATEGORIES.filter(c=>c.id!=='all').map(c => `<option value="${c.id}" ${editing && editing.category===c.id?'selected':''}>${c.icon} ${c.name}</option>`).join('')}</select></div>
+      <div class="form-field" style="margin-bottom:0;"><label class="form-label">模型<span class="req">*</span></label><select class="form-select" id="f_model">${MODELS.map(m => `<option value="${m.id}" ${editing && editing.model===m.id?'selected':''}>${m.name}${m.hot?' 🔥':''}</option>`).join('')}</select></div></div>
+      <div class="form-field" style="margin-bottom:0;"><label class="form-label">作者署名</label><input class="form-input" id="f_author" value="${editing ? escapeHtml(editing.author||'') : ''}" placeholder="你的名字或昵称（可选）"></div>
+      <div class="form-field" style="margin-bottom:0;margin-top:14px;"><label class="form-label">标签（回车添加，最多10个）</label><div class="tag-input-area" id="tagArea">${state.formTags.map((t,i) => `<span class="tag-chip">${escapeHtml(t)}<span class="tag-chip-remove" onclick="removeTag(${i})">×</span></span>`).join('')}<input class="tag-input-field" id="tagInput" placeholder="输入标签后按回车..." onkeydown="handleTagInput(event)"></div></div>
     </div>
-  `;
+    <div class="form-card"><div class="form-group-title"><span class="num">2</span>Prompt 内容</div>
+      <div class="form-field"><label class="form-label">正向提示词 (Positive Prompt)<span class="req">*</span></label><textarea class="form-textarea" id="f_prompt" placeholder="masterpiece, best quality, 1girl, solo, ...">${editing ? escapeHtml(editing.prompt) : ''}</textarea><div class="form-hint">建议以英文逗号分隔关键词，质量词放在最前</div></div>
+      <div class="form-field" style="margin-bottom:0;"><label class="form-label">负向提示词 (Negative Prompt)</label><textarea class="form-textarea" id="f_negative" style="min-height:80px;" placeholder="worst quality, low quality, bad anatomy, ...">${editing ? escapeHtml(editing.negative || '') : ''}</textarea></div>
+    </div>
+    <div class="form-card"><div class="form-group-title"><span class="num">3</span>生成参数</div>
+      <div class="form-row"><div class="form-field" style="margin-bottom:0;"><label class="form-label">采样器 Sampler</label><select class="form-select" id="f_sampler">${['Euler a','DPM++ 2M Karras','DPM++ SDE Karras','DPM++ 2M SDE Karras','DDIM','N/A'].map(s => `<option ${editing && editing.params && editing.params.sampler===s?'selected':''}>${s}</option>`).join('')}</select></div>
+      <div class="form-field" style="margin-bottom:0;"><label class="form-label">步数 Steps</label><input class="form-input" id="f_steps" value="${editing && editing.params ? editing.params.steps : '28'}"></div></div>
+      <div class="form-row"><div class="form-field" style="margin-bottom:0;"><label class="form-label">CFG Scale</label><input class="form-input" id="f_cfg" value="${editing && editing.params ? editing.params.cfg : '7'}"></div>
+      <div class="form-field" style="margin-bottom:0;"><label class="form-label">尺寸 Size</label><select class="form-select" id="f_size">${['832x1216','1024x1024','768x1024','1024x768','1216x832','512x512'].map(s => `<option ${editing && editing.params && editing.params.size===s?'selected':''}>${s}</option>`).join('')}</select></div></div>
+    </div>
+    <div class="form-actions"><button class="btn-cancel" onclick="navigate('${isEdit ? 'detail' : 'home'}')">取消</button>${isEdit ? `<button class="btn-danger" onclick="confirmDeletePrompt('${editing.id}')">删除</button>` : ''}<button class="btn-submit" onclick="submitPrompt()" id="submitBtn">${isEdit ? '保存修改' : '发布提示词'}</button></div>
+    <div style="text-align:center;margin-top:12px;font-size:11px;color:var(--text-muted);">💡 保存后数据会提交到 GitHub 仓库，GitHub Pages 需 1-2 分钟重新部署后对所有访客可见</div>
+  </div>`;
 }
 
 function handleTagInput(e) {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    const input = document.getElementById('tagInput');
-    const val = input.value.trim();
-    if (val && formTags.length < 10 && !formTags.includes(val)) {
-      formTags.push(val);
-      renderTagChips();
-    }
-    input.value = '';
-  }
+  if (e.key === 'Enter') { e.preventDefault(); const input = document.getElementById('tagInput'); const val = input.value.trim(); if (val && state.formTags.length < 10 && !state.formTags.includes(val)) { state.formTags.push(val); renderTagChips(); } input.value = ''; }
 }
+function removeTag(idx) { state.formTags.splice(idx, 1); renderTagChips(); }
+function renderTagChips() { const area = document.getElementById('tagArea'); area.innerHTML = state.formTags.map((t,i) => `<span class="tag-chip">${escapeHtml(t)}<span class="tag-chip-remove" onclick="removeTag(${i})">×</span></span>`).join('') + '<input class="tag-input-field" id="tagInput" placeholder="输入标签后按回车..." onkeydown="handleTagInput(event)">'; document.getElementById('tagInput').focus(); }
 
-function removeTag(idx) {
-  formTags.splice(idx, 1);
-  renderTagChips();
-}
-
-function renderTagChips() {
-  const area = document.getElementById('tagArea');
-  const input = document.getElementById('tagInput');
-  area.innerHTML = formTags.map((t,i) => `<span class="tag-chip">${escapeHtml(t)}<span class="tag-chip-remove" onclick="removeTag(${i})">×</span></span>`).join('') + '<input class="tag-input-field" id="tagInput" placeholder="输入标签后按回车..." onkeydown="handleTagInput(event)">';
-  document.getElementById('tagInput').focus();
-}
-
-function submitPrompt() {
+async function submitPrompt() {
   const title = document.getElementById('f_title').value.trim();
   const prompt = document.getElementById('f_prompt').value.trim();
   const category = document.getElementById('f_category').value;
   const model = document.getElementById('f_model').value;
+  const author = document.getElementById('f_author').value.trim() || '匿名';
   const negative = document.getElementById('f_negative').value.trim();
   const sampler = document.getElementById('f_sampler').value;
   const steps = document.getElementById('f_steps').value;
   const cfg = document.getElementById('f_cfg').value;
   const size = document.getElementById('f_size').value;
-
   if (!title) { showToast('请填写标题', 'error'); return; }
   if (!prompt) { showToast('请填写正向提示词', 'error'); return; }
-
   const isEdit = !!state.editingPromptId;
-
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = true; submitBtn.textContent = '保存中...';
   if (isEdit) {
     const p = state.prompts.find(x => x.id === state.editingPromptId);
-    if (p) {
-      p.title = title; p.prompt = prompt; p.negative = negative;
-      p.category = category; p.model = model; p.tags = [...formTags];
-      p.params = { sampler, steps, cfg, size, seed: p.params.seed };
-    }
-    saveState(); showToast('修改已保存', 'success');
-    navigate('detail', { promptId: state.editingPromptId });
+    if (p) { p.title=title; p.prompt=prompt; p.negative=negative; p.category=category; p.model=model; p.author=author; p.tags=[...state.formTags]; p.params={sampler,steps,cfg,size,seed:p.params?p.params.seed:'随机'}; }
+    const ok = await savePromptsToGitHub(`Edit: ${title}`);
+    if (ok) { showToast('修改已保存到 GitHub', 'success'); navigate('detail', { promptId: state.editingPromptId }); }
+    else { submitBtn.disabled = false; submitBtn.textContent = '保存修改'; }
   } else {
     const newId = genId('p');
     const today = new Date().toISOString().split('T')[0];
-    state.prompts.unshift({
-      id: newId, title, prompt, negative, category, model,
-      author: 'me', tags: [...formTags],
-      params: { sampler, steps, cfg, size, seed: '随机' },
-      likes: 0, saves: 0, comments: 0, date: today
-    });
-    saveState(); showToast('发布成功！', 'success');
-    navigate('detail', { promptId: newId });
+    state.prompts.unshift({ id:newId, title, prompt, negative, category, model, author, tags:[...state.formTags], params:{sampler,steps,cfg,size,seed:'随机'}, likes:0, saves:0, date:today });
+    const ok = await savePromptsToGitHub(`Add: ${title}`);
+    if (ok) { showToast('发布成功，已提交到 GitHub', 'success'); navigate('detail', { promptId: newId }); }
+    else { state.prompts = state.prompts.filter(p => p.id !== newId); submitBtn.disabled = false; submitBtn.textContent = '发布提示词'; }
   }
 }
 
-function deletePrompt(id) {
-  if (!confirm('确定删除这个提示词吗？此操作不可恢复。')) return;
-  state.prompts = state.prompts.filter(p => p.id !== id);
-  delete state.comments[id];
-  state.likedIds.delete(id);
-  state.savedIds.delete(id);
-  state.history = state.history.filter(h => h !== id);
-  saveState(); showToast('提示词已删除', 'success');
-  navigate('home');
+function confirmDeletePrompt(id) {
+  showConfirm('删除提示词', '确定删除这个提示词吗？删除后会提交到 GitHub，此操作不可恢复。', async () => {
+    const p = state.prompts.find(x => x.id === id);
+    const title = p ? p.title : '';
+    state.prompts = state.prompts.filter(p => p.id !== id);
+    state.likedIds.delete(id); state.savedIds.delete(id);
+    saveLocalData();
+    const ok = await savePromptsToGitHub(`Delete: ${title}`);
+    if (ok) { showToast('已删除并提交到 GitHub', 'success'); navigate('home'); }
+    else { render(); }
+  });
 }
-
-// ==================== 个人中心 ====================
-function renderProfile() {
-  const myPrompts = state.prompts.filter(p => p.author === 'me');
-  const savedPrompts = state.prompts.filter(p => state.savedIds.has(p.id));
-  const likedPrompts = state.prompts.filter(p => state.likedIds.has(p.id));
-  const historyPrompts = state.history.map(id => state.prompts.find(p => p.id === id)).filter(Boolean);
-
-  let tabContent = '';
-  if (state.profileTab === 'posts') {
-    tabContent = myPrompts.length === 0 ? emptyStateHTML('📝', '还没有发布过提示词', '点击右上角「发布」分享你的第一个 Prompt')
-      : `<div class="card-grid">${myPrompts.map(p => renderPromptCard(p)).join('')}</div>`;
-  } else if (state.profileTab === 'saved') {
-    tabContent = savedPrompts.length === 0 ? emptyStateHTML('⭐', '还没有收藏任何提示词', '浏览提示词时点击星标即可收藏')
-      : `<div class="card-grid">${savedPrompts.map(p => renderPromptCard(p)).join('')}</div>`;
-  } else if (state.profileTab === 'liked') {
-    tabContent = likedPrompts.length === 0 ? emptyStateHTML('❤️', '还没有点赞过提示词', '浏览提示词时点击心形即可点赞')
-      : `<div class="card-grid">${likedPrompts.map(p => renderPromptCard(p)).join('')}</div>`;
-  } else if (state.profileTab === 'history') {
-    tabContent = historyPrompts.length === 0 ? emptyStateHTML('🕐', '暂无浏览历史', '浏览过的提示词会显示在这里')
-      : `<div class="card-grid">${historyPrompts.map(p => renderPromptCard(p)).join('')}</div>`;
-  }
-
-  return `
-    <div class="profile-header">
-      <div class="profile-info">
-        <div class="profile-avatar">我</div>
-        <div class="profile-detail">
-          <h2>我</h2>
-          <div class="profile-bio">这个账号是我自己 · 本地离线版</div>
-          <div class="profile-stats">
-            <div class="profile-stat"><div class="profile-stat-num">${myPrompts.length}</div><div class="profile-stat-label">发布</div></div>
-            <div class="profile-stat"><div class="profile-stat-num">${savedPrompts.length}</div><div class="profile-stat-label">收藏</div></div>
-            <div class="profile-stat"><div class="profile-stat-num">${likedPrompts.length}</div><div class="profile-stat-label">点赞</div></div>
-            <div class="profile-stat"><div class="profile-stat-num">${historyPrompts.length}</div><div class="profile-stat-label">历史</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="tab-bar">
-      <div class="tab-item ${state.profileTab==='posts'?'active':''}" onclick="setProfileTab('posts')">我的发布 (${myPrompts.length})</div>
-      <div class="tab-item ${state.profileTab==='saved'?'active':''}" onclick="setProfileTab('saved')">我的收藏 (${savedPrompts.length})</div>
-      <div class="tab-item ${state.profileTab==='liked'?'active':''}" onclick="setProfileTab('liked')">我的点赞 (${likedPrompts.length})</div>
-      <div class="tab-item ${state.profileTab==='history'?'active':''}" onclick="setProfileTab('history')">浏览历史 (${historyPrompts.length})</div>
-    </div>
-
-    ${tabContent}
-  `;
-}
-
-function emptyStateHTML(icon, text, hint) {
-  return `<div class="empty-state"><div class="empty-icon">${icon}</div><div class="empty-text">${text}</div><div class="empty-hint">${hint}</div></div>`;
-}
-
-function setProfileTab(tab) { state.profileTab = tab; render(); }
 
 // ==================== 交互函数 ====================
 function toggleLike(id) {
-  const p = state.prompts.find(x => x.id === id);
-  if (!p) return;
-  if (state.likedIds.has(id)) { state.likedIds.delete(id); p.likes--; }
-  else { state.likedIds.add(id); p.likes++; }
-  saveState(); render();
+  const p = state.prompts.find(x => x.id === id); if (!p) return;
+  if (state.likedIds.has(id)) { state.likedIds.delete(id); p.likes = (p.likes||0) - 1; }
+  else { state.likedIds.add(id); p.likes = (p.likes||0) + 1; }
+  saveLocalData(); render();
 }
-
 function toggleSave(id) {
-  const p = state.prompts.find(x => x.id === id);
-  if (!p) return;
-  if (state.savedIds.has(id)) { state.savedIds.delete(id); p.saves--; showToast('已取消收藏'); }
-  else { state.savedIds.add(id); p.saves++; showToast('已收藏', 'success'); }
-  saveState(); render();
+  const p = state.prompts.find(x => x.id === id); if (!p) return;
+  if (state.savedIds.has(id)) { state.savedIds.delete(id); p.saves = (p.saves||0) - 1; showToast('已取消收藏'); }
+  else { state.savedIds.add(id); p.saves = (p.saves||0) + 1; showToast('已收藏', 'success'); }
+  saveLocalData(); render();
 }
 
-// ==================== 后台管理 ====================
+// ==================== 管理后台 ====================
 function renderAdmin() {
-  return `
-    <div class="admin-layout">
-      <div class="admin-sidebar">
-        <div class="admin-brand">&#9881; 后台管理</div>
-        ${[
-          {id:'dashboard',icon:'📊',name:'仪表盘'},
-          {id:'prompts',icon:'📝',name:'提示词管理'},
-          {id:'categories',icon:'🏷️',name:'分类管理'},
-          {id:'models',icon:'🤖',name:'模型管理'},
-          {id:'comments',icon:'💬',name:'评论管理'},
-          {id:'users',icon:'👥',name:'用户管理'},
-          {id:'data',icon:'💾',name:'数据备份'},
-          {id:'settings',icon:'⚙️',name:'系统设置'},
-        ].map(item => `
-          <div class="admin-nav-item ${state.adminTab===item.id?'active':''}" onclick="setAdminTab('${item.id}')">
-            <span class="admin-nav-icon">${item.icon}</span>${item.name}
-          </div>
-        `).join('')}
-      </div>
-      <div class="admin-content">
-        ${renderAdminContent()}
-      </div>
-    </div>
-  `;
+  return `<div class="admin-layout"><div class="admin-sidebar">
+    <div class="admin-brand">⚙️ 管理后台</div>
+    ${[{id:'dashboard',icon:'📊',name:'仪表盘'},{id:'prompts',icon:'📝',name:'提示词管理'},{id:'settings',icon:'🔑',name:'GitHub设置'}].map(item => `<div class="admin-nav-item ${state.adminTab===item.id?'active':''}" onclick="setAdminTab('${item.id}')"><span class="admin-nav-icon">${item.icon}</span>${item.name}</div>`).join('')}
+  </div><div class="admin-content">${renderAdminContent()}</div></div>`;
 }
-
 function setAdminTab(tab) { state.adminTab = tab; closeModal(); render(); }
-
 function renderAdminContent() {
   switch (state.adminTab) {
     case 'dashboard': return renderAdminDashboard();
     case 'prompts': return renderAdminPrompts();
-    case 'categories': return renderAdminCategories();
-    case 'models': return renderAdminModels();
-    case 'comments': return renderAdminComments();
-    case 'users': return renderAdminUsers();
-    case 'data': return renderAdminData();
     case 'settings': return renderAdminSettings();
     default: return renderAdminDashboard();
   }
 }
-
-// 仪表盘
 function renderAdminDashboard() {
-  const totalLikes = state.prompts.reduce((s,p) => s+p.likes, 0);
-  const totalSaves = state.prompts.reduce((s,p) => s+p.saves, 0);
-  const totalComments = Object.values(state.comments).reduce((s,arr) => s+arr.length, 0);
-  const myPosts = state.prompts.filter(p => p.author === 'me').length;
-
-  // 分类统计
-  const catStats = state.categories.map(c => ({
-    ...c, count: state.prompts.filter(p => p.category === c.id).length
-  })).sort((a,b) => b.count - a.count);
-
-  // 模型统计
-  const modelStats = state.models.map(m => ({
-    ...m, count: state.prompts.filter(p => p.model === m.id).length
-  })).sort((a,b) => b.count - a.count);
-
-  // 热门提示词TOP5
-  const topPrompts = [...state.prompts].sort((a,b) => b.likes - a.likes).slice(0, 5);
-
-  return `
-    <div class="admin-page-title">仪表盘</div>
-    <div class="admin-page-desc">网站数据概览与快速统计</div>
-
-    <div class="dash-grid">
-      <div class="dash-card"><div class="dash-card-icon">📝</div><div class="dash-card-label">提示词总数</div><div class="dash-card-value">${state.prompts.length}</div><div class="dash-card-trend">我发布 ${myPosts} 条</div></div>
-      <div class="dash-card"><div class="dash-card-icon">❤️</div><div class="dash-card-label">总点赞数</div><div class="dash-card-value">${totalLikes}</div><div class="dash-card-trend">总收藏 ${totalSaves}</div></div>
-      <div class="dash-card"><div class="dash-card-icon">💬</div><div class="dash-card-label">评论总数</div><div class="dash-card-value">${totalComments}</div></div>
-      <div class="dash-card"><div class="dash-card-icon">🏷️</div><div class="dash-card-label">分类/模型</div><div class="dash-card-value">${state.categories.length}/${state.models.length}</div></div>
-      <div class="dash-card"><div class="dash-card-icon">👥</div><div class="dash-card-label">用户数</div><div class="dash-card-value">${state.users.length}</div></div>
-      <div class="dash-card"><div class="dash-card-icon">🕐</div><div class="dash-card-label">浏览历史</div><div class="dash-card-value">${state.history.length}</div></div>
+  const totalLikes = state.prompts.reduce((s,p) => s+(p.likes||0), 0);
+  const totalSaves = state.prompts.reduce((s,p) => s+(p.saves||0), 0);
+  const catStats = CATEGORIES.filter(c=>c.id!=='all').map(c => ({...c, count: state.prompts.filter(p => p.category === c.id).length})).sort((a,b) => b.count - a.count);
+  const topPrompts = [...state.prompts].sort((a,b) => (b.likes||0) - (a.likes||0)).slice(0, 5);
+  return `<div class="admin-page-title">仪表盘</div><div class="admin-page-desc">数据概览与 GitHub 同步状态</div>
+    <div class="config-card">
+      <div class="config-row"><div><div class="config-label">GitHub 仓库</div><div class="config-value">${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}</div></div><span class="config-status online">已连接</span></div>
+      <div class="config-row"><div><div class="config-label">数据文件</div><div class="config-value">${GITHUB_CONFIG.dataPath}</div></div><span class="config-status ${state.dataSha?'online':'offline'}">${state.dataSha?'已存在':'未创建'}</span></div>
+      <div class="config-row"><div><div class="config-label">最后更新</div><div class="config-value">${state.lastUpdated ? new Date(state.lastUpdated).toLocaleString('zh-CN') : '未知'}</div></div></div>
+      <div class="config-row"><div><div class="config-label">管理员状态</div><div class="config-value">${state.githubToken ? 'Token已配置 (ghp_***' + state.githubToken.slice(-4) + ')' : '未配置Token'}</div></div><span class="config-status ${state.isAdmin?'online':'offline'}">${state.isAdmin?'已登录':'未登录'}</span></div>
     </div>
-
-    <div class="two-col">
-      <div>
-        <div class="admin-table-wrap">
-          <div class="admin-table-header"><div class="admin-table-title">🔥 热门提示词 TOP5</div></div>
-          <table class="admin-table">
-            <thead><tr><th>排名</th><th>标题</th><th>模型</th><th>点赞</th><th>收藏</th></tr></thead>
-            <tbody>
-              ${topPrompts.map((p,i) => {
-                const m = getModel(p.model);
-                return `<tr onclick="navigate('detail',{promptId:'${p.id}'})" style="cursor:pointer;">
-                  <td><span class="user-rank ${i===0?'top1':i===1?'top2':i===2?'top3':''}" style="display:inline-block;">${i+1}</span></td>
-                  <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(p.title)}</td>
-                  <td><span class="table-model-badge" style="background:${m.color}22;color:${m.color};">${m.short}</span></td>
-                  <td>❤️ ${p.likes}</td>
-                  <td>⭐ ${p.saves}</td>
-                </tr>`;
-              }).join('')}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div>
-        <div class="sidebar-card">
-          <div class="sidebar-title">分类分布</div>
-          ${catStats.map(c => `
-            <div style="margin-bottom:8px;">
-              <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;">
-                <span>${c.icon} ${c.name}</span><span style="color:var(--text-muted);">${c.count}</span>
-              </div>
-              <div style="height:6px;background:var(--bg-input);border-radius:3px;overflow:hidden;">
-                <div style="height:100%;width:${state.prompts.length? (c.count/state.prompts.length*100):0}%;background:linear-gradient(90deg,var(--accent),var(--cyan));border-radius:3px;"></div>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-        <div class="sidebar-card">
-          <div class="sidebar-title">模型分布</div>
-          ${modelStats.map(m => `
-            <div style="margin-bottom:8px;">
-              <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;">
-                <span style="color:${m.color};">${m.short}</span><span style="color:var(--text-muted);">${m.count}</span>
-              </div>
-              <div style="height:6px;background:var(--bg-input);border-radius:3px;overflow:hidden;">
-                <div style="height:100%;width:${state.prompts.length? (m.count/state.prompts.length*100):0}%;background:${m.color};border-radius:3px;"></div>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-      </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:20px;">
+      <div class="sidebar-card" style="margin-bottom:0;"><div class="dash-card-icon">📝</div><div class="dash-card-label">提示词总数</div><div class="dash-card-value">${state.prompts.length}</div></div>
+      <div class="sidebar-card" style="margin-bottom:0;"><div class="dash-card-icon">❤️</div><div class="dash-card-label">总点赞</div><div class="dash-card-value">${totalLikes}</div><div class="dash-card-trend">收藏 ${totalSaves}</div></div>
+      <div class="sidebar-card" style="margin-bottom:0;"><div class="dash-card-icon">🏷️</div><div class="dash-card-label">分类/模型</div><div class="dash-card-value">${CATEGORIES.length-1}/${MODELS.length}</div></div>
+      <div class="sidebar-card" style="margin-bottom:0;"><div class="dash-card-icon">🕐</div><div class="dash-card-label">我的收藏</div><div class="dash-card-value">${state.savedIds.size}</div></div>
     </div>
-  `;
+    <div class="admin-table-wrap"><div class="admin-table-header"><div class="admin-table-title">🔥 热门提示词 TOP5</div></div><table class="admin-table"><thead><tr><th>排名</th><th>标题</th><th>模型</th><th>点赞</th><th>收藏</th><th>操作</th></tr></thead><tbody>
+      ${topPrompts.length === 0 ? '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:30px;">暂无数据</td></tr>' : topPrompts.map((p,i) => { const m = getModel(p.model); return `<tr><td><span class="user-rank ${i===0?'top1':i===1?'top2':i===2?'top3':''}" style="display:inline-block;">${i+1}</span></td><td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(p.title)}</td><td><span class="table-model-badge" style="background:${m.color}22;color:${m.color};">${m.short}</span></td><td>❤️ ${p.likes||0}</td><td>⭐ ${p.saves||0}</td><td><div class="table-actions"><button class="table-action-btn" onclick="navigate('detail',{promptId:'${p.id}'})">查看</button><button class="table-action-btn" onclick="navigate('publish',{editId:'${p.id}'})">编辑</button></div></td></tr>`; }).join('')}
+    </tbody></table></div>`;
 }
-
-// 提示词管理
 function renderAdminPrompts() {
-  return `
-    <div class="admin-page-title">提示词管理</div>
-    <div class="admin-page-desc">管理所有提示词内容，支持编辑和删除</div>
-    <div class="admin-table-wrap">
-      <div class="admin-table-header">
-        <div class="admin-table-title">共 ${state.prompts.length} 条提示词</div>
-        <button class="table-action-btn primary" onclick="navigate('publish')">+ 新增提示词</button>
+  return `<div class="admin-page-title">提示词管理</div><div class="admin-page-desc">管理所有提示词，编辑删除会同步到 GitHub</div>
+    <div class="admin-table-wrap"><div class="admin-table-header"><div class="admin-table-title">共 ${state.prompts.length} 条提示词</div><button class="table-action-btn primary" onclick="navigate('publish')">+ 新增提示词</button></div>
+    <div style="overflow-x:auto;"><table class="admin-table"><thead><tr><th>标题</th><th>分类</th><th>模型</th><th>作者</th><th>点赞</th><th>日期</th><th>操作</th></tr></thead><tbody>
+      ${state.prompts.length === 0 ? '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:30px;">暂无提示词，点击右上角新增</td></tr>' : state.prompts.map(p => { const cat = getCategory(p.category); const m = getModel(p.model); return `<tr>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escapeHtml(p.title)}">${escapeHtml(p.title)}</td>
+        <td>${cat.icon} ${cat.name}</td><td><span class="table-model-badge" style="background:${m.color}22;color:${m.color};">${m.short}</span></td>
+        <td>${escapeHtml(p.author||'匿名')}</td><td>❤️ ${p.likes||0}</td><td style="font-size:11px;">${p.date}</td>
+        <td><div class="table-actions"><button class="table-action-btn" onclick="navigate('detail',{promptId:'${p.id}'})">查看</button><button class="table-action-btn" onclick="navigate('publish',{editId:'${p.id}'})">编辑</button><button class="table-action-btn danger" onclick="confirmDeletePrompt('${p.id}')">删除</button></div></td>
+      </tr>`; }).join('')}
+    </tbody></table></div></div>`;
+}
+function renderAdminSettings() {
+  return `<div class="admin-page-title">GitHub 设置</div><div class="admin-page-desc">配置 GitHub Token 以获得发布和编辑权限</div>
+    <div class="config-card">
+      <div class="config-row"><div><div class="config-label">仓库地址</div><div class="config-value">github.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}</div></div></div>
+      <div class="config-row"><div><div class="config-label">数据文件路径</div><div class="config-value">${GITHUB_CONFIG.dataPath}</div></div></div>
+      <div class="config-row"><div><div class="config-label">分支</div><div class="config-value">${GITHUB_CONFIG.branch}</div></div></div>
+    </div>
+    <div class="form-card">
+      <div class="form-group-title"><span class="num">🔑</span>Personal Access Token</div>
+      <div class="form-field"><label class="form-label">GitHub Token</label><input class="form-input" id="tokenInput" type="password" value="${state.githubToken||''}" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" style="font-family:monospace;"></div>
+      <div class="form-hint" style="margin-bottom:14px;">
+        Token 创建方法：GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token → 勾选 <strong>repo</strong> 权限 → 生成后复制
       </div>
-      <div style="overflow-x:auto;">
-        <table class="admin-table">
-          <thead><tr><th>标题</th><th>分类</th><th>模型</th><th>作者</th><th>点赞</th><th>评论</th><th>日期</th><th>操作</th></tr></thead>
-          <tbody>
-            ${state.prompts.map(p => {
-              const cat = getCategory(p.category);
-              const m = getModel(p.model);
-              const author = getUser(p.author);
-              return `<tr>
-                <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escapeHtml(p.title)}">${escapeHtml(p.title)}</td>
-                <td>${cat.icon} ${cat.name}</td>
-                <td><span class="table-model-badge" style="background:${m.color}22;color:${m.color};">${m.short}</span></td>
-                <td><span style="display:flex;align-items:center;gap:5px;"><span class="author-avatar" style="width:20px;height:20px;font-size:9px;background:${author.color};">${author.avatar}</span>${author.name}</span></td>
-                <td>❤️ ${p.likes}</td>
-                <td>💬 ${(state.comments[p.id]||[]).length}</td>
-                <td style="font-size:11px;">${p.date}</td>
-                <td>
-                  <div class="table-actions">
-                    <button class="table-action-btn" onclick="navigate('detail',{promptId:'${p.id}'})">查看</button>
-                    <button class="table-action-btn" onclick="navigate('publish',{editId:'${p.id}'})">编辑</button>
-                    <button class="table-action-btn danger" onclick="adminDeletePrompt('${p.id}')">删除</button>
-                  </div>
-                </td>
-              </tr>`;
-            }).join('')}
-          </tbody>
-        </table>
+      <div class="form-actions" style="margin-top:0;">
+        <button class="btn-cancel" onclick="testToken()">验证Token</button>
+        <button class="btn-submit" onclick="saveToken()">保存并登录</button>
+        ${state.isAdmin ? '<button class="btn-danger" onclick="logoutAdmin()">退出登录</button>' : ''}
       </div>
+      <div id="tokenStatus" style="margin-top:12px;font-size:12px;"></div>
     </div>
-  `;
+    <div class="config-card">
+      <div class="config-row"><div><div class="config-label">手动刷新数据</div><div class="config-value">从 GitHub 重新拉取最新数据</div></div><button class="table-action-btn primary" onclick="reloadData()">刷新</button></div>
+      <div class="config-row"><div><div class="config-label">导出本地数据</div><div class="config-value">导出当前提示词数据为 JSON</div></div><button class="table-action-btn" onclick="exportLocalData()">导出</button></div>
+    </div>`;
 }
-
-function adminDeletePrompt(id) {
-  if (!confirm('确定删除这个提示词吗？')) return;
-  state.prompts = state.prompts.filter(p => p.id !== id);
-  delete state.comments[id];
-  saveState(); showToast('提示词已删除', 'success'); render();
+async function testToken() {
+  const token = document.getElementById('tokenInput').value.trim();
+  if (!token) { showToast('请输入Token', 'error'); return; }
+  const statusEl = document.getElementById('tokenStatus');
+  statusEl.innerHTML = '<span style="color:var(--text-muted);">验证中...</span>';
+  const result = await verifyToken(token);
+  statusEl.innerHTML = `<span style="color:${result.valid?'var(--green)':'var(--red)'};">${result.valid ? '✅ ' : '❌ '}${result.msg}</span>`;
 }
-
-// 分类管理
-function renderAdminCategories() {
-  return `
-    <div class="admin-page-title">分类管理</div>
-    <div class="admin-page-desc">管理提示词分类，支持新增、编辑、删除和排序</div>
-    <div class="admin-table-wrap">
-      <div class="admin-table-header">
-        <div class="admin-table-title">共 ${state.categories.length} 个分类</div>
-        <button class="table-action-btn primary" onclick="openCategoryModal()">+ 新增分类</button>
-      </div>
-      <table class="admin-table">
-        <thead><tr><th>图标</th><th>ID</th><th>名称</th><th>提示词数</th><th>操作</th></tr></thead>
-        <tbody>
-          ${state.categories.map((c, i) => `
-            <tr>
-              <td style="font-size:18px;">${c.icon}</td>
-              <td style="font-family:monospace;font-size:11px;color:var(--text-muted);">${c.id}</td>
-              <td style="font-weight:600;">${c.name}</td>
-              <td>${state.prompts.filter(p=>p.category===c.id).length}</td>
-              <td>
-                <div class="table-actions">
-                  <button class="table-action-btn" onclick="openCategoryModal(${i})">编辑</button>
-                  <button class="table-action-btn danger" onclick="deleteCategory(${i})">删除</button>
-                </div>
-              </td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
+function saveToken() {
+  const token = document.getElementById('tokenInput').value.trim();
+  if (!token) { showToast('请输入Token', 'error'); return; }
+  state.githubToken = token;
+  state.isAdmin = true;
+  saveLocalData();
+  showToast('管理员登录成功', 'success');
+  render();
 }
-
-function openCategoryModal(idx) {
-  const cat = idx !== undefined ? state.categories[idx] : { id:'', name:'', icon:'📁' };
-  const isEdit = idx !== undefined;
-  showModal(`
-    <div class="modal-header"><div class="modal-title">${isEdit?'编辑分类':'新增分类'}</div><button class="modal-close" onclick="closeModal()">×</button></div>
-    <div class="modal-body">
-      <div class="form-field"><label class="form-label">分类ID（英文，唯一标识）<span class="req">*</span></label>
-        <input class="form-input" id="cat_id" value="${cat.id}" ${isEdit?'readonly':''} placeholder="例如：anime"></div>
-      <div class="form-field"><label class="form-label">分类名称<span class="req">*</span></label>
-        <input class="form-input" id="cat_name" value="${cat.name}" placeholder="例如：动漫"></div>
-      <div class="form-field"><label class="form-label">图标（emoji）</label>
-        <input class="form-input" id="cat_icon" value="${cat.icon}" placeholder="例如：🎨" maxlength="4"></div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeModal()">取消</button>
-      <button class="btn-submit" onclick="saveCategory(${idx})">${isEdit?'保存':'新增'}</button>
-    </div>
-  `);
+function logoutAdmin() {
+  state.githubToken = null;
+  state.isAdmin = false;
+  saveLocalData();
+  showToast('已退出管理员登录', 'success');
+  navigate('home');
 }
-
-function saveCategory(idx) {
-  const id = document.getElementById('cat_id').value.trim();
-  const name = document.getElementById('cat_name').value.trim();
-  const icon = document.getElementById('cat_icon').value.trim() || '📁';
-  if (!id || !name) { showToast('请填写ID和名称', 'error'); return; }
-  if (idx !== undefined) {
-    state.categories[idx] = { ...state.categories[idx], name, icon };
-  } else {
-    if (state.categories.find(c => c.id === id)) { showToast('该ID已存在', 'error'); return; }
-    state.categories.push({ id, name, icon });
-  }
-  saveState(); closeModal(); showToast('分类已保存', 'success'); render();
-}
-
-function deleteCategory(idx) {
-  const cat = state.categories[idx];
-  const count = state.prompts.filter(p => p.category === cat.id).length;
-  if (count > 0) {
-    if (!confirm(`该分类下有 ${count} 条提示词，删除后这些提示词将变为"未分类"。确定删除吗？`)) return;
-    state.prompts.forEach(p => { if (p.category === cat.id) p.category = 'unknown'; });
-  } else {
-    if (!confirm('确定删除这个分类吗？')) return;
-  }
-  state.categories.splice(idx, 1);
-  saveState(); showToast('分类已删除', 'success'); render();
-}
-
-// 模型管理
-function renderAdminModels() {
-  const COLORS = ['#ec4899','#06b6d4','#8b5cf6','#10b981','#f59e0b','#ef4444','#14b8a6','#f97316','#a855f7','#0ea5e9'];
-  return `
-    <div class="admin-page-title">模型管理</div>
-    <div class="admin-page-desc">管理AI模型分类，支持新增、编辑、删除、设置HOT和颜色</div>
-    <div class="admin-table-wrap">
-      <div class="admin-table-header">
-        <div class="admin-table-title">共 ${state.models.length} 个模型</div>
-        <button class="table-action-btn primary" onclick="openModelModal()">+ 新增模型</button>
-      </div>
-      <table class="admin-table">
-        <thead><tr><th>颜色</th><th>ID</th><th>全称</th><th>简称</th><th>HOT</th><th>提示词数</th><th>操作</th></tr></thead>
-        <tbody>
-          ${state.models.map((m, i) => `
-            <tr>
-              <td><div style="width:20px;height:20px;border-radius:50%;background:${m.color};"></div></td>
-              <td style="font-family:monospace;font-size:11px;color:var(--text-muted);">${m.id}</td>
-              <td style="font-weight:600;">${m.name}</td>
-              <td>${m.short}</td>
-              <td>${m.hot ? '<span class="hot-badge">HOT</span>' : '<span style="color:var(--text-muted);">—</span>'}</td>
-              <td>${state.prompts.filter(p=>p.model===m.id).length}</td>
-              <td>
-                <div class="table-actions">
-                  <button class="table-action-btn" onclick="openModelModal(${i})">编辑</button>
-                  <button class="table-action-btn danger" onclick="deleteModel(${i})">删除</button>
-                </div>
-              </td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
-
-let selectedModelColor = '#8b5cf6';
-
-function openModelModal(idx) {
-  const m = idx !== undefined ? state.models[idx] : { id:'', name:'', short:'', hot:false, color:'#8b5cf6' };
-  const isEdit = idx !== undefined;
-  selectedModelColor = m.color;
-  const COLORS = ['#ec4899','#06b6d4','#8b5cf6','#10b981','#f59e0b','#ef4444','#14b8a6','#f97316','#a855f7','#0ea5e9'];
-  showModal(`
-    <div class="modal-header"><div class="modal-title">${isEdit?'编辑模型':'新增模型'}</div><button class="modal-close" onclick="closeModal()">×</button></div>
-    <div class="modal-body">
-      <div class="form-field"><label class="form-label">模型ID（英文，唯一标识）<span class="req">*</span></label>
-        <input class="form-input" id="mod_id" value="${m.id}" ${isEdit?'readonly':''} placeholder="例如：pony"></div>
-      <div class="form-field"><label class="form-label">模型全称<span class="req">*</span></label>
-        <input class="form-input" id="mod_name" value="${m.name}" placeholder="例如：Pony Diffusion V6 XL"></div>
-      <div class="form-row">
-        <div class="form-field" style="margin-bottom:0;"><label class="form-label">简称<span class="req">*</span></label>
-          <input class="form-input" id="mod_short" value="${m.short}" placeholder="例如：Pony V6"></div>
-        <div class="form-field" style="margin-bottom:0;"><label class="form-label">设为HOT</label>
-          <div style="padding-top:8px;"><label class="switch"><input type="checkbox" id="mod_hot" ${m.hot?'checked':''}><span class="switch-slider"></span></label></div></div>
-      </div>
-      <div class="form-field" style="margin-bottom:0;"><label class="form-label">主题颜色</label>
-        <div class="color-picker-row">
-          ${COLORS.map(c => `<div class="color-swatch ${c===selectedModelColor?'selected':''}" style="background:${c};" onclick="selectModelColor('${c}', this)"></div>`).join('')}
-          <input type="color" id="mod_color_custom" value="${selectedModelColor}" style="width:28px;height:28px;border:none;border-radius:50%;cursor:pointer;background:none;" onchange="selectedModelColor=this.value">
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeModal()">取消</button>
-      <button class="btn-submit" onclick="saveModel(${idx})">${isEdit?'保存':'新增'}</button>
-    </div>
-  `);
-}
-
-function selectModelColor(color, el) {
-  selectedModelColor = color;
-  document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
-  el.classList.add('selected');
-}
-
-function saveModel(idx) {
-  const id = document.getElementById('mod_id').value.trim();
-  const name = document.getElementById('mod_name').value.trim();
-  const short = document.getElementById('mod_short').value.trim();
-  const hot = document.getElementById('mod_hot').checked;
-  const color = selectedModelColor;
-  if (!id || !name || !short) { showToast('请填写完整信息', 'error'); return; }
-  if (idx !== undefined) {
-    state.models[idx] = { ...state.models[idx], name, short, hot, color };
-  } else {
-    if (state.models.find(m => m.id === id)) { showToast('该ID已存在', 'error'); return; }
-    state.models.push({ id, name, short, hot, color });
-  }
-  saveState(); closeModal(); showToast('模型已保存', 'success'); render();
-}
-
-function deleteModel(idx) {
-  const m = state.models[idx];
-  const count = state.prompts.filter(p => p.model === m.id).length;
-  if (count > 0) {
-    if (!confirm(`该模型下有 ${count} 条提示词，删除后这些提示词将变为"其他模型"。确定删除吗？`)) return;
-    state.prompts.forEach(p => { if (p.model === m.id) p.model = 'other'; });
-  } else {
-    if (!confirm('确定删除这个模型吗？')) return;
-  }
-  state.models.splice(idx, 1);
-  saveState(); showToast('模型已删除', 'success'); render();
-}
-
-// 评论管理
-function renderAdminComments() {
-  const allComments = [];
-  Object.entries(state.comments).forEach(([promptId, comments]) => {
-    comments.forEach((c, idx) => {
-      const p = state.prompts.find(x => x.id === promptId);
-      allComments.push({ ...c, promptId, idx, promptTitle: p ? p.title : '（已删除）' });
-    });
-  });
-  allComments.sort((a,b) => (b.time === '刚刚' ? 1 : 0) - (a.time === '刚刚' ? 1 : 0));
-
-  return `
-    <div class="admin-page-title">评论管理</div>
-    <div class="admin-page-desc">管理所有评论内容，支持删除</div>
-    <div class="admin-table-wrap">
-      <div class="admin-table-header"><div class="admin-table-title">共 ${allComments.length} 条评论</div></div>
-      ${allComments.length === 0 ? '<div class="empty-state"><div class="empty-icon">💬</div><div class="empty-text">暂无评论</div></div>' : `
-      <div style="overflow-x:auto;">
-        <table class="admin-table">
-          <thead><tr><th>作者</th><th>评论内容</th><th>所属提示词</th><th>时间</th><th>操作</th></tr></thead>
-          <tbody>
-            ${allComments.map(c => {
-              const u = getUser(c.author);
-              return `<tr>
-                <td><span style="display:flex;align-items:center;gap:5px;"><span class="author-avatar" style="width:20px;height:20px;font-size:9px;background:${u.color};">${u.avatar}</span>${u.name}</span></td>
-                <td style="max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escapeHtml(c.text)}">${escapeHtml(c.text)}</td>
-                <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;color:var(--accent-light);" onclick="navigate('detail',{promptId:'${c.promptId}'})" title="${escapeHtml(c.promptTitle)}">${escapeHtml(c.promptTitle)}</td>
-                <td style="font-size:11px;">${c.time}</td>
-                <td><button class="table-action-btn danger" onclick="adminDeleteComment('${c.promptId}',${c.idx})">删除</button></td>
-              </tr>`;
-            }).join('')}
-          </tbody>
-        </table>
-      </div>`}
-    </div>
-  `;
-}
-
-function adminDeleteComment(promptId, idx) {
-  if (!confirm('确定删除这条评论吗？')) return;
-  if (state.comments[promptId]) {
-    state.comments[promptId].splice(idx, 1);
-    saveState(); showToast('评论已删除', 'success'); render();
-  }
-}
-
-// 用户管理
-function renderAdminUsers() {
-  return `
-    <div class="admin-page-title">用户管理</div>
-    <div class="admin-page-desc">管理用户信息（本地演示数据）</div>
-    <div class="admin-table-wrap">
-      <div class="admin-table-header"><div class="admin-table-title">共 ${state.users.length} 个用户</div></div>
-      <table class="admin-table">
-        <thead><tr><th>头像</th><th>ID</th><th>昵称</th><th>简介</th><th>发布数</th><th>获赞数</th></tr></thead>
-        <tbody>
-          ${state.users.map(u => `
-            <tr>
-              <td><span class="author-avatar" style="background:${u.color};">${u.avatar}</span></td>
-              <td style="font-family:monospace;font-size:11px;color:var(--text-muted);">${u.id}</td>
-              <td style="font-weight:600;">${u.name}${u.id==='me'?' <span style="color:var(--accent-light);font-size:10px;">(我)</span>':''}</td>
-              <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${u.bio}</td>
-              <td>${state.prompts.filter(p=>p.author===u.id).length}</td>
-              <td>❤️ ${u.likes}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
-
-// 数据备份
-function renderAdminData() {
-  return `
-    <div class="admin-page-title">数据备份与恢复</div>
-    <div class="admin-page-desc">导出或导入所有数据，方便备份和迁移</div>
-
-    <div class="two-col">
-      <div class="sidebar-card" style="margin-bottom:0;">
-        <div class="sidebar-title">📤 导出数据</div>
-        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;line-height:1.6;">将所有提示词、分类、模型、评论、设置等数据导出为 JSON 文件，可用于备份或迁移到其他设备。</p>
-        <button class="btn-submit" style="width:100%;" onclick="exportData()">导出全部数据</button>
-      </div>
-
-      <div class="sidebar-card" style="margin-bottom:0;">
-        <div class="sidebar-title">📥 导入数据</div>
-        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;line-height:1.6;">从 JSON 文件恢复数据。<strong style="color:var(--red);">注意：导入将覆盖当前所有数据！</strong></p>
-        <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData(event)">
-        <button class="btn-cancel" style="width:100%;" onclick="document.getElementById('importFile').click()">选择文件导入</button>
-      </div>
-    </div>
-
-    <div class="sidebar-card" style="margin-top:20px;">
-      <div class="sidebar-title">⚠️ 危险操作</div>
-      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;">重置所有数据为初始默认状态，此操作不可恢复。</p>
-      <button class="btn-danger" onclick="resetAllData()">重置为默认数据</button>
-    </div>
-
-    <div class="sidebar-card" style="margin-top:20px;">
-      <div class="sidebar-title">📊 数据统计</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px;">
-        <div>提示词：<strong>${state.prompts.length}</strong></div>
-        <div>分类：<strong>${state.categories.length}</strong></div>
-        <div>模型：<strong>${state.models.length}</strong></div>
-        <div>用户：<strong>${state.users.length}</strong></div>
-        <div>评论：<strong>${Object.values(state.comments).reduce((s,a)=>s+a.length,0)}</strong></div>
-        <div>浏览历史：<strong>${state.history.length}</strong></div>
-      </div>
-    </div>
-  `;
-}
-
-function exportData() {
-  const data = {
-    prompts: state.prompts,
-    comments: state.comments,
-    categories: state.categories,
-    models: state.models,
-    users: state.users,
-    settings: state.settings,
-    likedIds: [...state.likedIds],
-    savedIds: [...state.savedIds],
-    history: state.history,
-    exportTime: new Date().toISOString(),
-    version: '2.0',
-  };
+function exportLocalData() {
+  const data = { prompts: state.prompts, lastUpdated: new Date().toISOString() };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `prompthub_backup_${new Date().toISOString().split('T')[0]}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
+  const a = document.createElement('a'); a.href = url; a.download = `prompts_export_${new Date().toISOString().split('T')[0]}.json`; a.click(); URL.revokeObjectURL(url);
   showToast('数据导出成功', 'success');
 }
 
-function importData(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  if (!confirm('导入将覆盖当前所有数据，确定继续吗？')) { event.target.value = ''; return; }
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const data = JSON.parse(e.target.result);
-      if (data.prompts) state.prompts = data.prompts;
-      if (data.comments) state.comments = data.comments;
-      if (data.categories) state.categories = data.categories;
-      if (data.models) state.models = data.models;
-      if (data.users) state.users = data.users;
-      if (data.settings) state.settings = { ...DEFAULT_SETTINGS, ...data.settings };
-      state.likedIds = new Set(data.likedIds || []);
-      state.savedIds = new Set(data.savedIds || []);
-      state.history = data.history || [];
-      saveState(); applyTheme(); render();
-      showToast('数据导入成功', 'success');
-    } catch(err) {
-      showToast('导入失败：文件格式错误', 'error');
-    }
-  };
-  reader.readAsText(file);
-  event.target.value = '';
-}
-
-function resetAllData() {
-  if (!confirm('确定要重置所有数据吗？此操作不可恢复！')) return;
-  if (!confirm('再次确认：所有自定义内容将被清除，恢复为初始默认数据。')) return;
-  localStorage.removeItem('prompthub_v2');
-  initDefaultData();
-  saveState(); applyTheme(); render();
-  showToast('数据已重置', 'success');
-}
-
-// 系统设置
-function renderAdminSettings() {
-  return `
-    <div class="admin-page-title">系统设置</div>
-    <div class="admin-page-desc">自定义网站名称、描述、主题等全局配置</div>
-
-    <div class="form-card">
-      <div class="form-group-title"><span class="num">1</span>基本设置</div>
-      <div class="form-field">
-        <label class="form-label">网站名称</label>
-        <input class="form-input" id="set_siteName" value="${escapeHtml(state.settings.siteName)}" placeholder="PromptHub">
-      </div>
-      <div class="form-field">
-        <label class="form-label">网站描述（首页标语）</label>
-        <input class="form-input" id="set_siteDesc" value="${escapeHtml(state.settings.siteDesc || '')}" placeholder="发现最优质的 AI 生图提示词">
-      </div>
-      <div class="form-row">
-        <div class="form-field" style="margin-bottom:0;">
-          <label class="form-label">每页显示数量</label>
-          <select class="form-select" id="set_perPage">
-            ${[6,8,10,12,16,20,24].map(n => `<option value="${n}" ${state.settings.itemsPerPage===n?'selected':''}>${n} 条/页</option>`).join('')}
-          </select>
-        </div>
-        <div class="form-field" style="margin-bottom:0;">
-          <label class="form-label">默认主题</label>
-          <select class="form-select" id="set_theme" onchange="previewTheme(this.value)">
-            <option value="dark" ${state.settings.theme==='dark'?'selected':''}>深色模式</option>
-            <option value="light" ${state.settings.theme==='light'?'selected':''}>浅色模式</option>
-          </select>
-        </div>
-      </div>
+// ==================== 管理员登录模态框 ====================
+function showAdminLogin() {
+  showModal(`<div class="modal"><div class="modal-header"><div class="modal-title">管理员登录</div><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body">
+    <div style="text-align:center;margin-bottom:16px;"><div style="font-size:36px;margin-bottom:8px;">🔑</div><div style="font-size:14px;color:var(--text-secondary);">发布和管理需要 GitHub Personal Access Token</div></div>
+    <div class="auth-field"><label class="auth-label">GitHub Token</label><input class="auth-input" id="loginToken" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" onkeydown="if(event.key==='Enter')doAdminLogin()"></div>
+    <div class="auth-hint" style="text-align:left;margin-top:10px;">
+      <strong>创建方法：</strong><br>
+      1. GitHub → Settings → Developer settings<br>
+      2. Personal access tokens → Tokens (classic)<br>
+      3. Generate new token → 勾选 <strong>repo</strong> 权限<br>
+      4. 生成后复制粘贴到上方
     </div>
-
-    <div class="form-card">
-      <div class="form-group-title"><span class="num">2</span>功能开关</div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
-        <div><div style="font-size:13px;font-weight:600;">浏览历史记录</div><div style="font-size:11px;color:var(--text-muted);">记录用户浏览过的提示词</div></div>
-        <label class="switch"><input type="checkbox" id="set_history" ${state.settings.showHistory?'checked':''}><span class="switch-slider"></span></label>
-      </div>
-    </div>
-
-    <div class="form-actions">
-      <button class="btn-cancel" onclick="render()">重置</button>
-      <button class="btn-submit" onclick="saveSettings()">保存设置</button>
-    </div>
-  `;
+    <div class="auth-error" id="loginError"></div>
+    <button class="auth-submit" onclick="doAdminLogin()">登录</button>
+  </div></div>`);
+  setTimeout(() => document.getElementById('loginToken')?.focus(), 100);
 }
-
-function previewTheme(theme) {
-  document.body.classList.toggle('light', theme === 'light');
-}
-
-function saveSettings() {
-  state.settings.siteName = document.getElementById('set_siteName').value.trim() || 'PromptHub';
-  state.settings.siteDesc = document.getElementById('set_siteDesc').value.trim();
-  state.settings.itemsPerPage = parseInt(document.getElementById('set_perPage').value);
-  state.settings.theme = document.getElementById('set_theme').value;
-  state.settings.showHistory = document.getElementById('set_history').checked;
-  saveState(); applyTheme(); render();
-  showToast('设置已保存', 'success');
+async function doAdminLogin() {
+  const token = document.getElementById('loginToken').value.trim();
+  const errorEl = document.getElementById('loginError');
+  if (!token) { errorEl.textContent = '请输入Token'; return; }
+  errorEl.textContent = '验证中...';
+  const result = await verifyToken(token);
+  if (result.valid) {
+    state.githubToken = token;
+    state.isAdmin = true;
+    saveLocalData();
+    closeModal();
+    showToast('管理员登录成功', 'success');
+    render();
+  } else {
+    errorEl.textContent = result.msg;
+  }
 }
 
 // ==================== 模态框 ====================
-function showModal(content) {
-  document.getElementById('modalContainer').innerHTML = `<div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal">${content}</div></div>`;
-}
-function closeModal() {
-  document.getElementById('modalContainer').innerHTML = '';
+function showModal(content) { document.getElementById('modalContainer').innerHTML = `<div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal">${content}</div></div>`; }
+function closeModal() { document.getElementById('modalContainer').innerHTML = ''; }
+function showConfirm(title, text, onConfirm) {
+  showModal(`<div class="modal" style="max-width:380px;"><div class="modal-body">
+    <div class="confirm-icon">⚠️</div><div class="confirm-title">${title}</div><div class="confirm-text">${text}</div>
+    <div class="confirm-actions"><button class="btn-cancel" onclick="closeModal()">取消</button><button class="btn-danger" id="confirmOk">确定</button></div>
+  </div></div>`);
+  document.getElementById('confirmOk').onclick = () => { closeModal(); onConfirm(); };
 }
 
 // ==================== 初始化 ====================
-loadState();
+loadLocalData();
 applyTheme();
 render();
 
-// 键盘快捷键
+(async function init() {
+  await fetchPromptsFromGitHub();
+  render();
+})();
+
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeModal();
-  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-    e.preventDefault();
-    document.getElementById('globalSearch').focus();
-  }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); document.getElementById('globalSearch').focus(); }
 });
 </script>
 </body>
