@@ -1,4 +1,25 @@
 {
-  "prompts": [],
-  "lastUpdated": "2026-08-23T15:22:53.425Z"
+  "prompts": [
+    {
+      "id": "p_1787501831608_0sznd",
+      "title": "秋日公园里，栗色长卷发、琥珀色眼睛的温柔系美女，手持红枫叶，金色逆光氛围",
+      "prompt": "masterpiece, best quality, very aesthetic, newest, absurdres, rating: general, 1girl, solo, brown wavy long hair, amber eyes, beauty mark under left eye, white knit sweater, light blue denim shorts, holding a red maple leaf, autumn park, golden hour, warm backlight, soft smile, looking at viewer, bokeh, depth of field, upper body, highly detailed face, beautiful detailed eyes, soft lighting",
+      "negative": "nsfw, lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry, artist name, bad face, bad eyes, bad mouth, bad proportions, extra limbs, malformed limbs, deformed hands, long neck, ugly, fat, old, 3d, photorealistic, sketch, painting",
+      "category": "anime",
+      "model": "animagine",
+      "author": "daiyuxin",
+      "tags": [],
+      "params": {
+        "sampler": "DPM++ 2M Karras",
+        "steps": "28",
+        "cfg": "7",
+        "size": "832x1216",
+        "seed": "随机"
+      },
+      "likes": 0,
+      "saves": 0,
+      "date": "2026-08-23"
+    }
+  ],
+  "lastUpdated": "2026-08-23T16:17:11.608Z"
 }
