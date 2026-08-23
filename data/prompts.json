@@ -1,31 +1,6 @@
 {
   "prompts": [
     {
-      "id": "p_demo_004",
-      "title": "国风水墨山水，孤舟蓑笠翁",
-      "prompt": "traditional chinese ink painting, shan shui landscape, misty mountains, lone boat, old fisherman with straw hat, willow trees, river, calligraphy style, minimalist, black and white with subtle color, song dynasty style, atmospheric perspective, serene",
-      "negative": "photorealistic, 3d, modern, colorful, western style, cartoon, anime, text, watermark, signature, blurry, low quality",
-      "category": "chinese",
-      "model": "midjourney",
-      "author": "InkPainter",
-      "tags": [
-        "国风",
-        "水墨",
-        "山水",
-        "意境"
-      ],
-      "params": {
-        "sampler": "N/A",
-        "steps": "N/A",
-        "cfg": "N/A",
-        "size": "1024x1024",
-        "seed": "N/A"
-      },
-      "likes": 198,
-      "saves": 87,
-      "date": "2026-08-15"
-    },
-    {
       "id": "p_demo_005",
       "title": "Pony风格校园JK制服少女，教室场景",
       "prompt": "masterpiece, best quality, 1girl, solo, school uniform, jk, white shirt, plaid skirt, red bowtie, classroom, desk, window, afternoon sunlight, looking at viewer, gentle smile, short hair, hairclip, detailed background, depth of field, warm tones",
@@ -101,5 +76,5 @@
       "date": "2026-08-12"
     }
   ],
-  "lastUpdated": "2026-08-23T15:22:40.598Z"
+  "lastUpdated": "2026-08-23T15:22:44.317Z"
 }
