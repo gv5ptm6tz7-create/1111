@@ -1,31 +1,6 @@
 {
   "prompts": [
     {
-      "id": "p_demo_005",
-      "title": "Pony风格校园JK制服少女，教室场景",
-      "prompt": "masterpiece, best quality, 1girl, solo, school uniform, jk, white shirt, plaid skirt, red bowtie, classroom, desk, window, afternoon sunlight, looking at viewer, gentle smile, short hair, hairclip, detailed background, depth of field, warm tones",
-      "negative": "worst quality, low quality, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, text, watermark, signature, blurry, nsfw",
-      "category": "anime",
-      "model": "pony",
-      "author": "AnimeDreamer",
-      "tags": [
-        "Pony",
-        "JK",
-        "校园",
-        "少女"
-      ],
-      "params": {
-        "sampler": "DPM++ 2M Karras",
-        "steps": "28",
-        "cfg": "6",
-        "size": "832x1216",
-        "seed": "3333333333"
-      },
-      "likes": 512,
-      "saves": 267,
-      "date": "2026-08-10"
-    },
-    {
       "id": "p_demo_006",
       "title": "Animagine猫耳少女，慵懒午后",
       "prompt": "masterpiece, best quality, 1girl, solo, cat ears, cat tail, nekomimi, long hair, white hair, blue eyes, sweater, thigh highs, lying on couch, pillow, lazy afternoon, sunlight through window, dust particles, cozy, warm, looking at viewer, blush, anime style",
@@ -76,5 +51,5 @@
       "date": "2026-08-12"
     }
   ],
-  "lastUpdated": "2026-08-23T15:22:44.317Z"
+  "lastUpdated": "2026-08-23T15:22:47.466Z"
 }
