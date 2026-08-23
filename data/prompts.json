@@ -1,31 +1,6 @@
 {
   "prompts": [
     {
-      "id": "p_demo_001",
-      "title": "赛博朋克雨夜街头少女，霓虹灯光反射",
-      "prompt": "masterpiece, best quality, 1girl, solo, cyberpunk, rain, neon lights, reflection, wet street, jacket, looking at viewer, city background, night, cinematic lighting, depth of field, highly detailed, 8k",
-      "negative": "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry",
-      "category": "cyberpunk",
-      "model": "pony",
-      "author": "PixelMaster",
-      "tags": [
-        "赛博朋克",
-        "雨夜",
-        "霓虹",
-        "少女"
-      ],
-      "params": {
-        "sampler": "DPM++ 2M Karras",
-        "steps": "30",
-        "cfg": "7",
-        "size": "832x1216",
-        "seed": "1234567890"
-      },
-      "likes": 342,
-      "saves": 128,
-      "date": "2026-08-18"
-    },
-    {
       "id": "p_demo_002",
       "title": "动漫风格夏日海边少女，蓝天白云",
       "prompt": "masterpiece, best quality, 1girl, solo, summer, beach, ocean, blue sky, white clouds, sundress, straw hat, smile, looking at viewer, wind, hair flowing, seagulls, sunlight, vibrant colors, anime style, studio ghibli inspired",
@@ -176,5 +151,5 @@
       "date": "2026-08-12"
     }
   ],
-  "lastUpdated": "2026-08-23T15:21:46.602Z"
+  "lastUpdated": "2026-08-23T15:22:01.406Z"
 }
