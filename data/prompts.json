@@ -1,31 +1,6 @@
 {
   "prompts": [
     {
-      "id": "p_demo_002",
-      "title": "动漫风格夏日海边少女，蓝天白云",
-      "prompt": "masterpiece, best quality, 1girl, solo, summer, beach, ocean, blue sky, white clouds, sundress, straw hat, smile, looking at viewer, wind, hair flowing, seagulls, sunlight, vibrant colors, anime style, studio ghibli inspired",
-      "negative": "worst quality, low quality, bad anatomy, bad hands, missing fingers, extra fingers, deformed, blurry, text, watermark, signature",
-      "category": "anime",
-      "model": "animagine",
-      "author": "AnimeDreamer",
-      "tags": [
-        "动漫",
-        "夏日",
-        "海边",
-        "少女"
-      ],
-      "params": {
-        "sampler": "Euler a",
-        "steps": "28",
-        "cfg": "6",
-        "size": "832x1216",
-        "seed": "9876543210"
-      },
-      "likes": 289,
-      "saves": 156,
-      "date": "2026-08-17"
-    },
-    {
       "id": "p_demo_003",
       "title": "超写实东方女性人像，柔光摄影棚",
       "prompt": "photorealistic, portrait of a beautiful east asian woman, soft studio lighting, rim light, detailed skin texture, pores, natural makeup, dark hair, elegant, looking at camera, shallow depth of field, 85mm lens, f/1.8, professional photography, hyperrealistic",
@@ -151,5 +126,5 @@
       "date": "2026-08-12"
     }
   ],
-  "lastUpdated": "2026-08-23T15:22:01.406Z"
+  "lastUpdated": "2026-08-23T15:22:12.878Z"
 }
