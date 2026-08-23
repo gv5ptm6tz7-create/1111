@@ -1,31 +1,6 @@
 {
   "prompts": [
     {
-      "id": "p_demo_003",
-      "title": "超写实东方女性人像，柔光摄影棚",
-      "prompt": "photorealistic, portrait of a beautiful east asian woman, soft studio lighting, rim light, detailed skin texture, pores, natural makeup, dark hair, elegant, looking at camera, shallow depth of field, 85mm lens, f/1.8, professional photography, hyperrealistic",
-      "negative": "cartoon, anime, drawing, painting, illustration, 3d render, deformed, bad anatomy, extra limbs, missing limbs, bad hands, fused fingers, too many fingers, long neck, mutation, ugly, blurry, text, watermark",
-      "category": "portrait",
-      "model": "sd",
-      "author": "RealismPro",
-      "tags": [
-        "写实",
-        "人像",
-        "摄影棚",
-        "东方女性"
-      ],
-      "params": {
-        "sampler": "DPM++ SDE Karras",
-        "steps": "35",
-        "cfg": "5.5",
-        "size": "768x1024",
-        "seed": "5555555555"
-      },
-      "likes": 456,
-      "saves": 203,
-      "date": "2026-08-16"
-    },
-    {
       "id": "p_demo_004",
       "title": "国风水墨山水，孤舟蓑笠翁",
       "prompt": "traditional chinese ink painting, shan shui landscape, misty mountains, lone boat, old fisherman with straw hat, willow trees, river, calligraphy style, minimalist, black and white with subtle color, song dynasty style, atmospheric perspective, serene",
@@ -126,5 +101,5 @@
       "date": "2026-08-12"
     }
   ],
-  "lastUpdated": "2026-08-23T15:22:12.878Z"
+  "lastUpdated": "2026-08-23T15:22:40.598Z"
 }
