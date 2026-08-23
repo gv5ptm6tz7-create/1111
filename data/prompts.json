@@ -8,8 +8,19 @@
       "category": "cyberpunk",
       "model": "pony",
       "author": "PixelMaster",
-      "tags": ["赛博朋克", "雨夜", "霓虹", "少女"],
-      "params": { "sampler": "DPM++ 2M Karras", "steps": "30", "cfg": "7", "size": "832x1216", "seed": "1234567890" },
+      "tags": [
+        "赛博朋克",
+        "雨夜",
+        "霓虹",
+        "少女"
+      ],
+      "params": {
+        "sampler": "DPM++ 2M Karras",
+        "steps": "30",
+        "cfg": "7",
+        "size": "832x1216",
+        "seed": "1234567890"
+      },
       "likes": 342,
       "saves": 128,
       "date": "2026-08-18"
@@ -22,8 +33,19 @@
       "category": "anime",
       "model": "animagine",
       "author": "AnimeDreamer",
-      "tags": ["动漫", "夏日", "海边", "少女"],
-      "params": { "sampler": "Euler a", "steps": "28", "cfg": "6", "size": "832x1216", "seed": "9876543210" },
+      "tags": [
+        "动漫",
+        "夏日",
+        "海边",
+        "少女"
+      ],
+      "params": {
+        "sampler": "Euler a",
+        "steps": "28",
+        "cfg": "6",
+        "size": "832x1216",
+        "seed": "9876543210"
+      },
       "likes": 289,
       "saves": 156,
       "date": "2026-08-17"
@@ -36,8 +58,19 @@
       "category": "portrait",
       "model": "sd",
       "author": "RealismPro",
-      "tags": ["写实", "人像", "摄影棚", "东方女性"],
-      "params": { "sampler": "DPM++ SDE Karras", "steps": "35", "cfg": "5.5", "size": "768x1024", "seed": "5555555555" },
+      "tags": [
+        "写实",
+        "人像",
+        "摄影棚",
+        "东方女性"
+      ],
+      "params": {
+        "sampler": "DPM++ SDE Karras",
+        "steps": "35",
+        "cfg": "5.5",
+        "size": "768x1024",
+        "seed": "5555555555"
+      },
       "likes": 456,
       "saves": 203,
       "date": "2026-08-16"
@@ -50,8 +83,19 @@
       "category": "chinese",
       "model": "midjourney",
       "author": "InkPainter",
-      "tags": ["国风", "水墨", "山水", "意境"],
-      "params": { "sampler": "N/A", "steps": "N/A", "cfg": "N/A", "size": "1024x1024", "seed": "N/A" },
+      "tags": [
+        "国风",
+        "水墨",
+        "山水",
+        "意境"
+      ],
+      "params": {
+        "sampler": "N/A",
+        "steps": "N/A",
+        "cfg": "N/A",
+        "size": "1024x1024",
+        "seed": "N/A"
+      },
       "likes": 198,
       "saves": 87,
       "date": "2026-08-15"
@@ -64,8 +108,19 @@
       "category": "anime",
       "model": "pony",
       "author": "AnimeDreamer",
-      "tags": ["Pony", "JK", "校园", "少女"],
-      "params": { "sampler": "DPM++ 2M Karras", "steps": "28", "cfg": "6", "size": "832x1216", "seed": "3333333333" },
+      "tags": [
+        "Pony",
+        "JK",
+        "校园",
+        "少女"
+      ],
+      "params": {
+        "sampler": "DPM++ 2M Karras",
+        "steps": "28",
+        "cfg": "6",
+        "size": "832x1216",
+        "seed": "3333333333"
+      },
       "likes": 512,
       "saves": 267,
       "date": "2026-08-10"
@@ -78,25 +133,22 @@
       "category": "anime",
       "model": "animagine",
       "author": "AnimeDreamer",
-      "tags": ["Animagine", "猫耳", "少女", "日常"],
-      "params": { "sampler": "Euler a", "steps": "28", "cfg": "6", "size": "832x1216", "seed": "9999999999" },
+      "tags": [
+        "Animagine",
+        "猫耳",
+        "少女",
+        "日常"
+      ],
+      "params": {
+        "sampler": "Euler a",
+        "steps": "28",
+        "cfg": "6",
+        "size": "832x1216",
+        "seed": "9999999999"
+      },
       "likes": 423,
       "saves": 234,
       "date": "2026-08-03"
-    },
-    {
-      "id": "p_demo_007",
-      "title": "赛博朋克城市全景，飞行汽车，巨型全息广告",
-      "prompt": "cyberpunk cityscape, panoramic view, flying cars, giant holographic advertisements, neon signs, skyscrapers, night, rain, reflections, crowded streets, futuristic, blade runner style, cinematic, ultra detailed, 8k, concept art",
-      "negative": "low quality, blurry, text, watermark, signature, daytime, sunny, natural lighting, simple, minimalist",
-      "category": "cyberpunk",
-      "model": "midjourney",
-      "author": "PixelMaster",
-      "tags": ["赛博朋克", "城市", "全景", "飞行汽车"],
-      "params": { "sampler": "N/A", "steps": "N/A", "cfg": "N/A", "size": "1792x1024", "seed": "N/A" },
-      "likes": 521,
-      "saves": 234,
-      "date": "2026-08-14"
     },
     {
       "id": "p_demo_008",
@@ -106,12 +158,23 @@
       "category": "3d",
       "model": "sd",
       "author": "3DArchitect",
-      "tags": ["3D", "建筑", "参数化", "未来主义"],
-      "params": { "sampler": "DPM++ 2M Karras", "steps": "32", "cfg": "6.5", "size": "1024x768", "seed": "2222222222" },
+      "tags": [
+        "3D",
+        "建筑",
+        "参数化",
+        "未来主义"
+      ],
+      "params": {
+        "sampler": "DPM++ 2M Karras",
+        "steps": "32",
+        "cfg": "6.5",
+        "size": "1024x768",
+        "seed": "2222222222"
+      },
       "likes": 167,
       "saves": 72,
       "date": "2026-08-12"
     }
   ],
-  "lastUpdated": "2026-08-23T00:00:00.000Z"
+  "lastUpdated": "2026-08-23T15:21:46.602Z"
 }
