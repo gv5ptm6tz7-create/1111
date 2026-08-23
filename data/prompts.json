@@ -1,31 +1,6 @@
 {
   "prompts": [
     {
-      "id": "p_demo_006",
-      "title": "Animagine猫耳少女，慵懒午后",
-      "prompt": "masterpiece, best quality, 1girl, solo, cat ears, cat tail, nekomimi, long hair, white hair, blue eyes, sweater, thigh highs, lying on couch, pillow, lazy afternoon, sunlight through window, dust particles, cozy, warm, looking at viewer, blush, anime style",
-      "negative": "worst quality, low quality, bad anatomy, bad hands, missing fingers, extra fingers, deformed, blurry, text, watermark, signature, realistic, 3d, photo, nsfw",
-      "category": "anime",
-      "model": "animagine",
-      "author": "AnimeDreamer",
-      "tags": [
-        "Animagine",
-        "猫耳",
-        "少女",
-        "日常"
-      ],
-      "params": {
-        "sampler": "Euler a",
-        "steps": "28",
-        "cfg": "6",
-        "size": "832x1216",
-        "seed": "9999999999"
-      },
-      "likes": 423,
-      "saves": 234,
-      "date": "2026-08-03"
-    },
-    {
       "id": "p_demo_008",
       "title": "3D渲染未来主义建筑，参数化设计",
       "prompt": "3d render, futuristic architecture, parametric design, organic shapes, flowing curves, glass and steel structure, interior view, natural lighting, minimalist, zaha hadid style, octane render, unreal engine 5, photorealistic, 8k, architectural visualization",
@@ -51,5 +26,5 @@
       "date": "2026-08-12"
     }
   ],
-  "lastUpdated": "2026-08-23T15:22:47.466Z"
+  "lastUpdated": "2026-08-23T15:22:50.267Z"
 }
